@@ -1,26 +1,25 @@
-﻿namespace Alexa.NET.Request.Type
-{
-    public class DefaultRequestTypeConverter : IRequestTypeConverter
-    {
-        public bool CanConvert(string requestType)
-        {
-            return requestType == "IntentRequest" || requestType == "LaunchRequest" || requestType == "SessionEndedRequest" || requestType == "System.ExceptionEncountered";
-        }
+﻿namespace Alexa.NET.Request.Type;
 
-        public Request Convert(string requestType)
+public class DefaultRequestTypeConverter : IRequestTypeConverter
+{
+    public bool CanConvert(string requestType)
+    {
+        return requestType == "IntentRequest" || requestType == "LaunchRequest" || requestType == "SessionEndedRequest" || requestType == "System.ExceptionEncountered";
+    }
+
+    public Request Convert(string requestType)
+    {
+        switch (requestType)
         {
-            switch (requestType)
-            {
-                case "IntentRequest":
-                    return new IntentRequest();
-                case "LaunchRequest":
-                    return new LaunchRequest();
-                case "SessionEndedRequest":
-                    return new SessionEndedRequest();
-                case "System.ExceptionEncountered":
-                    return new SystemExceptionRequest();
-            }
-            return null;
+            case "IntentRequest":
+                return new IntentRequest();
+            case "LaunchRequest":
+                return new LaunchRequest();
+            case "SessionEndedRequest":
+                return new SessionEndedRequest();
+            case "System.ExceptionEncountered":
+                return new SystemExceptionRequest();
         }
+        return null;
     }
 }

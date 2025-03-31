@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class SkillEventPermissions
 {
-    public class SkillEventPermissions
-    {
-        [JsonProperty("acceptedPermissions")]
-        public Permission[] AcceptedPermissions { get; set; }
-    }
+    [JsonProperty("acceptedPermissions")]
+    public Permission[] AcceptedPermissions { get; set; }
 }

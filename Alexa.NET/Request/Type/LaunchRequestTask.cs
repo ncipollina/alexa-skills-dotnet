@@ -1,17 +1,16 @@
 ﻿using Alexa.NET.ConnectionTasks;
 using Newtonsoft.Json;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class LaunchRequestTask
 {
-    public class LaunchRequestTask
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+    [JsonProperty("name")]
+    public string Name { get; set; }
 
-        [JsonProperty("version")]
-        public string Version { get; set; }
+    [JsonProperty("version")]
+    public string Version { get; set; }
 
-        [JsonProperty("input")]
-        public IConnectionTask Input { get; set; }
-    }
+    [JsonProperty("input")]
+    public IConnectionTask Input { get; set; }
 }

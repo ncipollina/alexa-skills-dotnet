@@ -1,41 +1,41 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
+namespace Alexa.NET.Helpers;
 
-namespace Alexa.NET.Helpers
+public class MixedDateTimeConverter : JsonConverter<DateTime>
 {
-	public class MixedDateTimeConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
+    private static readonly DateTime UnixEpoch = 
+        new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-		static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-		{
-		    writer.WriteValue(value);
-		}
-
-		public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, JsonSerializer serializer)
+        switch (reader.TokenType)
         {
-            if(reader.ValueType == typeof(DateTime))
-            {
-                return reader.Value;
-            }
+            case JsonTokenType.String:
+                var stringValue = reader.GetString();
+                if (DateTime.TryParse(stringValue, out var parsed))
+                {
+                    return parsed;
+                }
+                throw new JsonException($"Invalid date string: {stringValue}");
 
-            if(reader.ValueType == typeof(long))
-            {
-                return UtcFromEpoch((long)reader.Value);
-            }
+            case JsonTokenType.Number:
+                if (reader.TryGetInt64(out var epoch))
+                {
+                    return UnixEpoch.AddMilliseconds(epoch);
+                }
+                throw new JsonException("Invalid epoch format");
 
-			if (reader.ValueType == typeof(String))
-			{
-                return DateTime.Parse(reader.Value.ToString());
-			}
+            default:
+                throw new JsonException($"Unexpected token parsing DateTime: {reader.TokenType}");
+        }
+    }
 
-			return UtcFromEpoch(((long)reader.Value));
-		}
-
-		private DateTime UtcFromEpoch(long epochTime)
-		{
-			return UnixEpoch.AddMilliseconds(epochTime);
-		}
-	}
+    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+    {
+        // Write as ISO 8601 string
+        writer.WriteStringValue(value.ToString("O")); // O = round-trip format
+    }
 }

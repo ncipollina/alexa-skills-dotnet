@@ -1,29 +1,29 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request
+
+namespace Alexa.NET.Request;
+
+public class Intent
 {
-    public class Intent
-    {
-        private string _name;
+    private string _name;
 
-        [JsonProperty("name")]
-        public string Name {
-            get { return _name; }
-            set {
-                _name = value;
-                Signature = value;
-            }
+    [JsonPropertyName("name")]
+    public string Name {
+        get { return _name; }
+        set {
+            _name = value;
+            Signature = value;
         }
-
-        [JsonIgnore]
-        public IntentSignature Signature { get; private set; }
-
-
-        [JsonProperty("confirmationStatus")]
-        public string ConfirmationStatus { get; set; }
-
-        [JsonProperty("slots")]
-        public Dictionary<string, Slot> Slots { get; set; }
     }
+
+    [JsonIgnore]
+    public IntentSignature Signature { get; private set; }
+
+
+    [JsonPropertyName("confirmationStatus")]
+    public string ConfirmationStatus { get; set; }
+
+    [JsonPropertyName("slots")]
+    public Dictionary<string, Slot> Slots { get; set; }
 }

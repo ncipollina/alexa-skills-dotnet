@@ -1,21 +1,20 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public class SlotValue
 {
-    public class SlotValue
-    {
-        [JsonProperty("type",NullValueHandling = NullValueHandling.Ignore),
-         JsonConverter(typeof(StringEnumConverter))]
-        public SlotValueType SlotType { get; set; }
+    [JsonPropertyName("type"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SlotValueType>))]
+    public SlotValueType SlotType { get; set; }
 
-        [JsonProperty("value",NullValueHandling = NullValueHandling.Ignore)]
-        public string Value { get; set; }
+    [JsonPropertyName("value"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Value { get; set; }
 
-        [JsonProperty("values",NullValueHandling = NullValueHandling.Ignore)]
-        public SlotValue[] Values { get; set; }
+    [JsonPropertyName("values"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public SlotValue[]? Values { get; set; }
 
-        [JsonProperty("resolutions",NullValueHandling = NullValueHandling.Ignore)]
-        public Resolution Resolutions { get; set; }
-    }
+    [JsonPropertyName("resolutions"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Resolution? Resolutions { get; set; }
 }

@@ -1,36 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Text.Json.Serialization;
 using Alexa.NET.Helpers;
-using Newtonsoft.Json;
 
-namespace Alexa.NET.ConnectionTasks.Inputs
+namespace Alexa.NET.ConnectionTasks.Inputs;
+
+public class ScheduleTaxiReservation : IConnectionTask
 {
-    public class ScheduleTaxiReservation:IConnectionTask
-    {
-        public const string AssociatedUri = "connection://AMAZON.ScheduleTaxiReservation/1";
-        [JsonIgnore]
-        public string ConnectionUri => AssociatedUri;
+    public const string ConnectionType = "ScheduleTaxiReservationRequest";
+    public const string VersionNumber = "1";
+    public const string ConnectionKey = $"{ConnectionType}/{VersionNumber}";
 
-        [JsonProperty("@type")]
-        public string Type => "ScheduleTaxiReservationRequest";
+    public const string AssociatedUri = "connection://AMAZON.ScheduleTaxiReservation/1";
+    [JsonIgnore] public string ConnectionUri => AssociatedUri;
 
-        [JsonProperty("@version")]
-        public string Version => 1.ToString();
+    [JsonPropertyName("@type")] public string Type => ConnectionType;
 
-        [JsonProperty("context", NullValueHandling = NullValueHandling.Ignore)]
-        public ConnectionTaskContext Context { get; set; }
+    [JsonPropertyName("@version")] public string Version => VersionNumber;
 
-        [JsonProperty("partySize")]
-        public int PartySize { get; set; }
+    [JsonPropertyName("context")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 
-        [JsonProperty("pickupLocation",NullValueHandling = NullValueHandling.Ignore)]
-        public PostalAddress PickupLocation { get; set; }
+    public ConnectionTaskContext Context { get; set; }
 
-        [JsonProperty("dropoffLocation",NullValueHandling = NullValueHandling.Ignore)]
-        public PostalAddress DropoffLocation { get; set; }
+    [JsonPropertyName("partySize")] public int PartySize { get; set; }
+    [JsonPropertyName("pickupLocation")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public PostalAddress PickupLocation { get; set; }
 
-        [JsonProperty("pickupTime",NullValueHandling = NullValueHandling.Ignore),JsonConverter(typeof(MixedDateTimeConverter))]
-        public DateTime? PickupTime { get; set; }
-    }
+    [JsonPropertyName("dropoffLocation")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public PostalAddress DropoffLocation { get; set; }
+
+    [JsonPropertyName("pickupTime")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonConverter(typeof(MixedDateTimeConverter))]
+    public DateTime? PickupTime { get; set; }
 }

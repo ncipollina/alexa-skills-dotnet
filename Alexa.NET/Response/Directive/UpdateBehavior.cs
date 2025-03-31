@@ -1,12 +1,11 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public enum UpdateBehavior
 {
-    public enum UpdateBehavior
-    {
-        [EnumMember(Value = "REPLACE")]
-        Replace,
-        [EnumMember(Value = "CLEAR")]
-        Clear
-    }
+    [EnumMember(Value = "REPLACE")]
+    Replace,
+    [EnumMember(Value = "CLEAR")]
+    Clear
 }

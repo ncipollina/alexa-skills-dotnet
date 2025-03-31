@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Tests
+namespace Alexa.NET.Tests;
+
+public class NewIntentRequest : Request.Type.Request
 {
-    public class NewIntentRequest : Request.Type.Request
-    {
-        [JsonProperty("testProperty")]
-        public bool TestProperty { get; set; }
-    }
+    [JsonPropertyName("testProperty")]
+    public bool TestProperty { get; set; }
 }

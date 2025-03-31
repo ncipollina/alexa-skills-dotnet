@@ -1,12 +1,11 @@
 using System.Runtime.Serialization;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public enum SlotValueType
 {
-    public enum SlotValueType
-    {
-        [EnumMember(Value="Simple")]
-        Simple,
-        [EnumMember(Value="List")]
-        List
-    }
+    [EnumMember(Value="Simple")]
+    Simple,
+    [EnumMember(Value="List")]
+    List
 }

@@ -1,12 +1,11 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public enum OnCompleteAction
 {
-    public enum OnCompleteAction
-    {
-        [EnumMember(Value="RESUME_SESSION")]
-        ResumeSession,
-        [EnumMember(Value="SEND_ERRORS_ONLY")]
-        SendErrorsOnly
-    }
+    [EnumMember(Value="RESUME_SESSION")]
+    ResumeSession,
+    [EnumMember(Value="SEND_ERRORS_ONLY")]
+    SendErrorsOnly
 }

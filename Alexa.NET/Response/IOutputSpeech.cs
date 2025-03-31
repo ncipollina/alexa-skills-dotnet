@@ -2,11 +2,10 @@ using Alexa.NET.Response.Converters;
 using Alexa.NET.Response.Directive;
 using Newtonsoft.Json;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+[JsonConverter(typeof(OutputSpeechConverter))]
+public interface IOutputSpeech : IResponse
 {
-    [JsonConverter(typeof(OutputSpeechConverter))]
-    public interface IOutputSpeech : IResponse
-    {
-        PlayBehavior? PlayBehavior { get; set; }
-    }
+    PlayBehavior? PlayBehavior { get; set; }
 }

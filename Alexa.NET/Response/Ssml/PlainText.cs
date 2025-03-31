@@ -1,20 +1,18 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
-namespace Alexa.NET.Response.Ssml
+namespace Alexa.NET.Response.Ssml;
+
+public class PlainText:ICommonSsml
 {
-    public class PlainText:ICommonSsml
+    public PlainText(string text)
     {
-        public PlainText(string text)
-        {
-            Text = text;
-        }
+        Text = text;
+    }
 
-        public string Text { get; set; }
+    public string Text { get; set; }
 
-        public XNode ToXml()
-        {
-            return new XText(Text);
-        }
+    public XNode ToXml()
+    {
+        return new XText(Text);
     }
 }

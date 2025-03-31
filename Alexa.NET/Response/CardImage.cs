@@ -1,13 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+public class CardImage
 {
-    public class CardImage
-    {
-        [JsonProperty("smallImageUrl",NullValueHandling = NullValueHandling.Ignore)]
-        public string SmallImageUrl { get; set; }
+    [JsonPropertyName("smallImageUrl")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string SmallImageUrl { get; set; }
 
-        [JsonProperty("largeImageUrl", NullValueHandling = NullValueHandling.Ignore)]
-        public string LargeImageUrl { get; set; }
-    }
+    [JsonPropertyName("largeImageUrl")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string LargeImageUrl { get; set; }
 }

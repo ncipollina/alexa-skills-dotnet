@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+public class LinkAccountCard : ICard
 {
-    public class LinkAccountCard : ICard
+    [JsonProperty("type")]
+    public string Type
     {
-        [JsonProperty("type")]
-        public string Type
-        {
-            get { return "LinkAccount"; }
-        }
+        get { return "LinkAccount"; }
     }
 }

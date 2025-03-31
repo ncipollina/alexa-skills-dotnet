@@ -1,25 +1,24 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public class Slot
 {
-    public class Slot
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
 
-        [JsonProperty("value", NullValueHandling = NullValueHandling.Ignore)]
-        public string Value { get; set; }
+    [JsonPropertyName("value"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Value { get; set; }
 
-        [JsonProperty("confirmationStatus", NullValueHandling = NullValueHandling.Ignore)]
-        public string ConfirmationStatus { get; set; }
+    [JsonPropertyName("confirmationStatus"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? ConfirmationStatus { get; set; }
 
-        [JsonProperty("source",NullValueHandling = NullValueHandling.Ignore)]
-        public string Source { get; set; }
+    [JsonPropertyName("source"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Source { get; set; }
 
-        [JsonProperty("resolutions", NullValueHandling = NullValueHandling.Ignore)]
-        public Resolution Resolution { get; set; }
+    [JsonPropertyName("resolutions"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Resolution? Resolution { get; set; }
 
-        [JsonProperty("slotValue",NullValueHandling = NullValueHandling.Ignore)]
-        public SlotValue SlotValue { get; set; }
-    }
+    [JsonPropertyName("slotValue"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public SlotValue? SlotValue { get; set; }
 }

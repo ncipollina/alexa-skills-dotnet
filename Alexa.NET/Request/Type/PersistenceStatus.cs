@@ -1,12 +1,11 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public enum PersistenceStatus
 {
-    public enum PersistenceStatus
-    {
-        [EnumMember(Value= "PERSISTED")]
-        Persisted,
-        [EnumMember(Value= "NOT_PERSISTED")]
-        NotPersisted
-    }
+    [EnumMember(Value= "PERSISTED")]
+    Persisted,
+    [EnumMember(Value= "NOT_PERSISTED")]
+    NotPersisted
 }

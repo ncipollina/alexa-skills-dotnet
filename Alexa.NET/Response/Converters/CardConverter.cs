@@ -2,52 +2,50 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Alexa.NET.Response.Converters
+namespace Alexa.NET.Response.Converters;
+
+public class CardConverter : JsonConverter
 {
-    public class CardConverter : JsonConverter
+    public override bool CanWrite => false;
+
+    public override bool CanRead => true;
+
+    public static Dictionary<string, Func<ICard>> TypeFactories = new Dictionary<string, Func<ICard>>
     {
-        public override bool CanWrite => false;
+        { "Simple", () => new SimpleCard() },
+        { "Standard", () => new StandardCard() },
+        { "LinkAccount", () => new LinkAccountCard() },
+        { "AskForPermissionsConsent", () => new AskForPermissionsConsentCard() }
+    };
 
-        public override bool CanRead => true;
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
+    }
 
-        public static Dictionary<string, Func<ICard>> TypeFactories = new Dictionary<string, Func<ICard>>
-        {
-            { "Simple", () => new SimpleCard() },
-            { "Standard", () => new StandardCard() },
-            { "LinkAccount", () => new LinkAccountCard() },
-            { "AskForPermissionsConsent", () => new AskForPermissionsConsentCard() }
-        };
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+        var jsonObject = JObject.Load(reader);
+        var typeKey = jsonObject["type"] ?? jsonObject["Type"];
+        var typeValue = typeKey.Value<string>();
+        var hasFactory = TypeFactories.ContainsKey(typeValue);
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
+        if (!hasFactory)
+            throw new Exception(
+                $"unable to deserialize response. " +
+                $"unrecognized card type '{typeValue}'"
+            );
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var jsonObject = JObject.Load(reader);
-            var typeKey = jsonObject["type"] ?? jsonObject["Type"];
-            var typeValue = typeKey.Value<string>();
-            var hasFactory = TypeFactories.ContainsKey(typeValue);
+        var card = TypeFactories[typeValue]();
 
-            if (!hasFactory)
-                throw new Exception(
-                    $"unable to deserialize response. " +
-                    $"unrecognized card type '{typeValue}'"
-                );
+        serializer.Populate(jsonObject.CreateReader(), card);
 
-            var card = TypeFactories[typeValue]();
+        return card;
+    }
 
-            serializer.Populate(jsonObject.CreateReader(), card);
-
-            return card;
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(ICard);
-        }
+    public override bool CanConvert(Type objectType)
+    {
+        return objectType == typeof(ICard);
     }
 }

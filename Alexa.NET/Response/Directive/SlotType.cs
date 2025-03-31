@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class SlotType
 {
-    public class SlotType
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonProperty("values")]
-        public SlotTypeValue[] Values { get; set; }
-    }
+    [JsonPropertyName("values")]
+    public SlotTypeValue[] Values { get; set; }
 }

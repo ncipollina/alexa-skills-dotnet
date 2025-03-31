@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class JsonDirective:IDirective
 {
-    public class JsonDirective:IDirective
+    public JsonDirective() { }
+
+    [JsonConstructor]
+    public JsonDirective(string type)
     {
-        public JsonDirective() { }
-
-        public JsonDirective(string type)
-        {
-            Type = type;
-        }
-
-        [JsonProperty("type")]
-        public string Type { get; }
-
-        [JsonExtensionData]
-        public Dictionary<string, object> Properties { get; set; } = new Dictionary<string, object>();
+        Type = type;
     }
+
+    [JsonPropertyName("type")]
+    public string Type { get; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement> Properties { get; set; } = new();
 }

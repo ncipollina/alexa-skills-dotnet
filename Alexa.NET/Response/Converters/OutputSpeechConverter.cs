@@ -1,51 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Alexa.NET.Response.Converters
+namespace Alexa.NET.Response.Converters;
+
+public class OutputSpeechConverter : JsonConverter
 {
-    public class OutputSpeechConverter : JsonConverter
+    public override bool CanRead => true;
+
+    public override bool CanWrite => false;
+
+    public static Dictionary<string, Func<IOutputSpeech>> TypeFactories = new Dictionary<string, Func<IOutputSpeech>>
     {
-        public override bool CanRead => true;
+        { "SSML", () => new SsmlOutputSpeech() },
+        { "PlainText", () => new PlainTextOutputSpeech() },
+    };
 
-        public override bool CanWrite => false;
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
+    }
 
-        public static Dictionary<string, Func<IOutputSpeech>> TypeFactories = new Dictionary<string, Func<IOutputSpeech>>
-        {
-            { "SSML", () => new SsmlOutputSpeech() },
-            { "PlainText", () => new PlainTextOutputSpeech() },
-        };
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+        var jsonObject = JObject.Load(reader);
+        var typeKey = jsonObject["type"] ?? jsonObject["Type"];
+        var typeValue = typeKey.Value<string>();
+        var hasFactory = TypeFactories.ContainsKey(typeValue);
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
+        if (!hasFactory)
+            throw new Exception(
+                $"unable to deserialize response. " +
+                $"unrecognized output speech type '{typeValue}'"
+            );
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var jsonObject = JObject.Load(reader);
-            var typeKey = jsonObject["type"] ?? jsonObject["Type"];
-            var typeValue = typeKey.Value<string>();
-            var hasFactory = TypeFactories.ContainsKey(typeValue);
+        var speech = TypeFactories[typeValue]();
 
-            if (!hasFactory)
-                throw new Exception(
-                    $"unable to deserialize response. " +
-                    $"unrecognized output speech type '{typeValue}'"
-                );
+        serializer.Populate(jsonObject.CreateReader(), speech);
 
-            var speech = TypeFactories[typeValue]();
+        return speech;
+    }
 
-            serializer.Populate(jsonObject.CreateReader(), speech);
-
-            return speech;
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(IOutputSpeech);
-        }
+    public override bool CanConvert(Type objectType)
+    {
+        return objectType == typeof(IOutputSpeech);
     }
 }

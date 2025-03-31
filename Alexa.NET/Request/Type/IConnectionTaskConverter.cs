@@ -1,14 +1,10 @@
-﻿using Alexa.NET.ConnectionTasks;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text.Json;
+using Alexa.NET.ConnectionTasks;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public interface IConnectionTaskConverter
 {
-    public interface IConnectionTaskConverter
-    {
-        bool CanConvert(JObject jObject);
-        IConnectionTask Convert(JObject jObject);
-    }
+    bool CanConvert(JsonElement element);
+    IConnectionTask Convert(JsonElement element, JsonSerializerOptions options);
 }

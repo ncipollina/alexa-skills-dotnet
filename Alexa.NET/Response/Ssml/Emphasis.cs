@@ -1,31 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Alexa.NET.Response.Ssml
+namespace Alexa.NET.Response.Ssml;
+
+public class Emphasis:ICommonSsml
 {
-    public class Emphasis:ICommonSsml
+    public string Text { get; set; }
+    public string Level { get; set; }
+
+    public Emphasis(string text)
     {
-        public string Text { get; set; }
-        public string Level { get; set; }
+        Text = text;
+    }
 
-        public Emphasis(string text)
+    public XNode ToXml()
+    {
+        List<XObject> objects = new List<XObject>();
+
+        if (!string.IsNullOrWhiteSpace(Level))
         {
-            Text = text;
+            objects.Add(new XAttribute("level", Level));
         }
 
-        public XNode ToXml()
-        {
-            List<XObject> objects = new List<XObject>();
+        objects.Add(new XText(Text));
 
-            if (!string.IsNullOrWhiteSpace(Level))
-            {
-                objects.Add(new XAttribute("level", Level));
-            }
-
-            objects.Add(new XText(Text));
-
-            return new XElement("emphasis", objects);
-        }
+        return new XElement("emphasis", objects);
     }
 }

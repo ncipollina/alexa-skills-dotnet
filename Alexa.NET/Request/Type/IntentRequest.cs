@@ -1,13 +1,12 @@
 using Newtonsoft.Json;
 
-namespace Alexa.NET.Request.Type
-{
-    public class IntentRequest : Request
-    {
-        [JsonProperty("dialogState")]
-        public string DialogState { get; set; }
+namespace Alexa.NET.Request.Type;
 
-        [JsonProperty("intent")]
-        public Intent Intent { get; set; }
-    }
+public class IntentRequest : Request
+{
+    [JsonProperty("dialogState")]
+    public string DialogState { get; set; }
+
+    [JsonProperty("intent")]
+    public Intent Intent { get; set; }
 }

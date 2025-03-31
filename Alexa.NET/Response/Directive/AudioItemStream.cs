@@ -1,22 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class AudioItemStream
 {
-    public class AudioItemStream
-    {
-        [JsonRequired]
-        [JsonProperty("url")]
-        public string Url { get; set; }
+    [JsonRequired]
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
 
-        [JsonRequired]
-        [JsonProperty("token")]
-        public string Token { get; set; }
+    [JsonRequired]
+    [JsonPropertyName("token")]
+    public string Token { get; set; }
         
-        [JsonProperty("expectedPreviousToken")]
-        public string ExpectedPreviousToken { get; set; }
+    [JsonPropertyName("expectedPreviousToken")]
+    public string ExpectedPreviousToken { get; set; }
 
-        [JsonRequired]
-        [JsonProperty("offsetInMilliseconds")]
-        public int OffsetInMilliseconds { get; set; }
-    }
+    [JsonRequired]
+    [JsonPropertyName("offsetInMilliseconds")]
+    public int OffsetInMilliseconds { get; set; }
 }

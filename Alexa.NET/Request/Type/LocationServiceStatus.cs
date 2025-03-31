@@ -1,12 +1,11 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public enum LocationServiceStatus
 {
-    public enum LocationServiceStatus
-    {
-        [EnumMember(Value = "RUNNING")]
-        Running,
-        [EnumMember(Value = "STOPPED")]
-        Stopped
-    }
+    [EnumMember(Value = "RUNNING")]
+    Running,
+    [EnumMember(Value = "STOPPED")]
+    Stopped
 }

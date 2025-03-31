@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Alexa.NET.Request.Type;
 
-namespace Alexa.NET.Request.Type
+public interface IRequestTypeConverter
 {
-    public interface IRequestTypeConverter
-    {
-        bool CanConvert(string requestType);
-        Request Convert(string requestType);
-    }
+    bool CanConvert(string requestType);
+    Request Convert(string requestType);
 }

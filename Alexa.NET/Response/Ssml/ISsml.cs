@@ -1,9 +1,7 @@
-﻿using System;
-using System.Xml.Linq;
-namespace Alexa.NET.Response.Ssml
+﻿using System.Xml.Linq;
+namespace Alexa.NET.Response.Ssml;
+
+public interface ISsml
 {
-    public interface ISsml
-    {
-        XNode ToXml();
-    }
+    XNode ToXml();
 }

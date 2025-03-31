@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-namespace Alexa.NET.Response
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace Alexa.NET.Response;
+
+public class AskForPermissionsConsentCard : ICard
 {
-    public class AskForPermissionsConsentCard : ICard
-    {
 
-        [JsonProperty("type")]
-        [JsonRequired]
-        public string Type
-        {
-            get { return "AskForPermissionsConsent"; }
-        }
+    [JsonPropertyName("type")]
+    public string Type => "AskForPermissionsConsent";
 
-        [JsonProperty("permissions")]
-        [JsonRequired]
-        public List<string> Permissions { get; set; } = new List<string>();
-    }
+    [JsonPropertyName("permissions")]
+    [JsonRequired]
+    public List<string> Permissions { get; set; } = [];
 }

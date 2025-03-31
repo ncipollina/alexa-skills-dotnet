@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public class Application
 {
-    public class Application
-    {
-        [JsonProperty("applicationId")]
-        public string ApplicationId { get; set; }
-    }
+    [JsonProperty("applicationId")]
+    public string ApplicationId { get; set; }
 }

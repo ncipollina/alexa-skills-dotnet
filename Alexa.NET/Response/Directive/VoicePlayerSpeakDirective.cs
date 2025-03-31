@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class VoicePlayerSpeakDirective : IProgressiveResponseDirective
 {
-    public class VoicePlayerSpeakDirective : IProgressiveResponseDirective
+    public const string DirectiveType = "VoicePlayer.Speak";
+    internal VoicePlayerSpeakDirective()
     {
-        internal VoicePlayerSpeakDirective()
-        {
-        }
-
-        public VoicePlayerSpeakDirective(Ssml.Speech speech) : this(speech.ToXml())
-        {
-        }
-
-        public VoicePlayerSpeakDirective(string speech)
-        {
-            Speech = speech;
-        }
-
-        [JsonProperty("type")]
-        public string Type => "VoicePlayer.Speak";
-
-        [JsonProperty("speech")]
-        public string Speech { get; }
     }
+
+    public VoicePlayerSpeakDirective(Ssml.Speech speech) : this(speech.ToXml())
+    {
+    }
+
+    public VoicePlayerSpeakDirective(string speech)
+    {
+        Speech = speech;
+    }
+
+    [JsonPropertyName("type")]
+    [JsonInclude]
+    public string Type => DirectiveType;
+
+    [JsonPropertyName("speech")]
+    public string Speech { get; }
 }

@@ -1,20 +1,18 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class AudioItemSource
 {
-	public class AudioItemSource
+	public AudioItemSource()
 	{
-		public AudioItemSource()
-		{
-		}
+	}
 
-		public AudioItemSource(string url)
-		{
-			Url = url;
-		}
+	public AudioItemSource(string url)
+	{
+		Url = url;
+	}
 
-		[JsonProperty("url"), JsonRequired]
-		public string Url { get; set; }
-    }
+	[JsonPropertyName("url"), JsonRequired]
+	public string Url { get; set; }
 }

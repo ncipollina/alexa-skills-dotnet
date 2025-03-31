@@ -1,42 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.ConnectionTasks.Inputs
+namespace Alexa.NET.ConnectionTasks.Inputs;
+
+public class PrintImageV1 : IConnectionTask
 {
-    public class PrintImageV1 : IConnectionTask
-    {
-        public const string AssociatedUri = "connection://AMAZON.PrintImage/1";
-        [JsonIgnore]
-        public string ConnectionUri => AssociatedUri;
+    public const string ConnectionType = "PrintImageRequest";
+    public const string VersionNumber = "1";
+    public const string ConnectionKey = $"{ConnectionType}/{VersionNumber}";
 
-        [JsonProperty("@type")]
-        public string Type => "PrintImageRequest";
+    public const string AssociatedUri = "connection://AMAZON.PrintImage/1";
+    [JsonIgnore]
+    public string ConnectionUri => AssociatedUri;
 
-        [JsonProperty("@version")]
-        public string Version => 1.ToString();
+    [JsonPropertyName("@type")] public string Type => ConnectionType;
 
-        [JsonProperty("context", NullValueHandling = NullValueHandling.Ignore)]
-        public ConnectionTaskContext Context { get; set; }
+    [JsonPropertyName("@version")] public string Version => VersionNumber;
 
-        [JsonProperty("title")]
-        public string Title { get; set; }
+    [JsonPropertyName("context")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ConnectionTaskContext Context { get; set; }
 
-        [JsonProperty("description")]
-        public string Description { get; set; }
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 
-        [JsonProperty("imageType"),JsonConverter(typeof(StringEnumConverter))]
-        public PrintImageV1Type ImageV1Type { get; set; }
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonProperty("url")]
-        public string Url { get; set; }
-    }
+    [JsonPropertyName("imageType"),JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PrintImageV1Type>))]
+    public PrintImageV1Type ImageV1Type { get; set; }
 
-    public enum PrintImageV1Type
-    {
-        JPG,
-        JPEG
-    }
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
+}
+
+public enum PrintImageV1Type
+{
+    JPG,
+    JPEG
 }

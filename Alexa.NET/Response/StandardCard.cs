@@ -1,25 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿
+using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+public class StandardCard : ICard
 {
-    public class StandardCard : ICard
-    {
-        [JsonProperty("type")]
-        [JsonRequired]
-        public string Type
-        {
-            get { return "Standard"; }
-        }
+    [JsonPropertyName("type")]
+    public string Type => "Standard";
 
-        [JsonRequired]
-        [JsonProperty("title")]
-        public string Title { get; set; }
+    [JsonRequired]
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 
-        [JsonRequired]
-        [JsonProperty("text")]
-        public string Content { get; set; }
+    [JsonRequired]
+    [JsonPropertyName("text")]
+    public string Content { get; set; }
 
-        [JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
-        public CardImage Image { get; set; }
-    }
+    [JsonPropertyName("image")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public CardImage Image { get; set; }
 }

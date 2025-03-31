@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class DialogUpdateDynamicEntities : IDirective
 {
-    public class DialogUpdateDynamicEntities : IDirective
-    {
-        [JsonProperty("type")]
-        public string Type => "Dialog.UpdateDynamicEntities";
+    public const string DirectiveType = "Dialog.UpdateDynamicEntities";
 
-        [JsonProperty("updateBehavior"), JsonConverter(typeof(StringEnumConverter))]
-        public UpdateBehavior UpdateBehavior { get; set; }
+    [JsonPropertyName("type")]
+    public string Type => DirectiveType;
 
-        [JsonProperty("types")]
-        public List<SlotType> Types { get; set; } = new List<SlotType>();
-    }
+    [JsonPropertyName("updateBehavior"), JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<UpdateBehavior>))]
+    public UpdateBehavior UpdateBehavior { get; set; }
+
+    [JsonPropertyName("types")]
+    public List<SlotType> Types { get; set; } = [];
 }
