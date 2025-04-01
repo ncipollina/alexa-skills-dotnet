@@ -1,11 +1,13 @@
+using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 using Alexa.NET.Response.Directive;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Alexa.NET.Response;
 
 public class SsmlOutputSpeech : IOutputSpeech
 {
+    public const string SpeechType = "SSML";
+
     public SsmlOutputSpeech()
     {
 
@@ -16,18 +18,15 @@ public class SsmlOutputSpeech : IOutputSpeech
         Ssml = ssml;
     }
 
-    [JsonRequired]
-    [JsonProperty("type")]
-    public string Type
-    {
-        get { return "SSML"; }
-    }
+    [JsonPropertyName("type")]
+    public string Type => SpeechType;
 
     [JsonRequired]
-    [JsonProperty("ssml")]
+    [JsonPropertyName("ssml")]
     public string Ssml { get; set; }
 
-    [JsonProperty("playBehavior", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonPropertyName("playBehavior")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PlayBehavior>))]
     public PlayBehavior? PlayBehavior { get; set; }
 }

@@ -38,7 +38,7 @@ public static class Utility
     {
         return File.ReadAllText(Path.Combine(ExamplesPath, expectedFile));
     }
-    private static bool JsonElementDeepEquals(this JsonElement a, JsonElement b)
+    public static bool JsonElementDeepEquals(this JsonElement a, JsonElement b)
     {
         if (a.ValueKind != b.ValueKind) return false;
 

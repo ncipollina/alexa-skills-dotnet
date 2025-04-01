@@ -5,9 +5,10 @@ namespace Alexa.NET.Response;
 
 public class AskForPermissionsConsentCard : ICard
 {
+    public const string CardType = "AskForPermissionsConsent";
 
     [JsonPropertyName("type")]
-    public string Type => "AskForPermissionsConsent";
+    public string Type => CardType;
 
     [JsonPropertyName("permissions")]
     [JsonRequired]

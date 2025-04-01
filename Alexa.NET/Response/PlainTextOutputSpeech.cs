@@ -1,11 +1,13 @@
+using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 using Alexa.NET.Response.Directive;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Alexa.NET.Response;
 
 public class PlainTextOutputSpeech : IOutputSpeech
 {
+    public const string SpeechType = "PlainText";
+
     public PlainTextOutputSpeech()
     {
 
@@ -16,18 +18,15 @@ public class PlainTextOutputSpeech : IOutputSpeech
         Text = text;
     }
 
-    [JsonProperty("type")]
-    [JsonRequired]
-    public string Type
-    {
-        get { return "PlainText"; }
-    }
+    [JsonPropertyName("type")]
+    public string Type => SpeechType;
 
     [JsonRequired]
-    [JsonProperty("text")]
+    [JsonPropertyName("text")]
     public string Text { get; set; }
 
-    [JsonProperty("playBehavior", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonPropertyName("playBehavior")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PlayBehavior>))]
     public PlayBehavior? PlayBehavior { get; set; }
 }

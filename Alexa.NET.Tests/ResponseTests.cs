@@ -9,6 +9,7 @@ using Alexa.NET.Response.Ssml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Alexa.NET.Tests;
 
@@ -79,15 +80,32 @@ public class ResponseTests
     [Fact]
     public void Create_HintDirective()
     {
-        var actual = new HintDirective { Hint = new Hint { Text = "sample text", Type = TextType.Plain } };
-        var expected = JObject.Parse(@"{
-            ""type"": ""Hint"",
-            ""hint"": {
-                ""type"": ""PlainText"",
-                ""text"": ""sample text""
+        // Arrange: create the actual object
+        var actual = new HintDirective
+        {
+            Hint = new Hint
+            {
+                Text = "sample text",
+                Type = TextType.Plain
             }
-        }");
-        Assert.True(CompareJson(actual, expected));
+        };
+
+        // Arrange: define the expected JSON
+        const string expectedJson = """
+                                    {
+                                        "type": "Hint",
+                                        "hint": {
+                                            "type": "PlainText",
+                                            "text": "sample text"
+                                        }
+                                    }
+                                    """;
+        
+        // Act & Assert: compare JSON structures using your deep equality method
+        var actualJson = JsonSerializer.Serialize(actual);
+        using var actualDoc = JsonDocument.Parse(actualJson);
+        using var expectedDoc = JsonDocument.Parse(expectedJson);
+        Assert.True(actualDoc.RootElement.JsonElementDeepEquals(expectedDoc.RootElement));
     }
 
     [Fact]

@@ -20,6 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Examples\AskForPermissionConsent.json" />
+    <None Update="Examples\TemplateImageBasic.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\TemplateImage.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Update="Examples\AskForPermissionsConsent.json">

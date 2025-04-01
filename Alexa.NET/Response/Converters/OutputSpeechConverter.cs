@@ -1,49 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Alexa.NET.Response.Converters;
 
-public class OutputSpeechConverter : JsonConverter
+public class OutputSpeechConverter : BasePolymorphicConverter<IOutputSpeech>
 {
-    public override bool CanRead => true;
 
-    public override bool CanWrite => false;
-
-    public static Dictionary<string, Func<IOutputSpeech>> TypeFactories = new Dictionary<string, Func<IOutputSpeech>>
+    public static Dictionary<string, Type> SpeechDerivedTypes = new()
     {
-        { "SSML", () => new SsmlOutputSpeech() },
-        { "PlainText", () => new PlainTextOutputSpeech() },
+        { SsmlOutputSpeech.SpeechType, typeof(SsmlOutputSpeech) },
+        { PlainTextOutputSpeech.SpeechType, typeof(PlainTextOutputSpeech) },
+    };
+    
+    protected override Func<JsonElement, string?> KeyResolver => element =>
+    {
+        static string? GetProp(JsonElement el, string name) =>
+            el.TryGetProperty(name, out var prop) ? prop.GetString() : null;
+
+        return GetProp(element, TypeDiscriminatorPropertyName) ?? GetProp(element, "Type");
     };
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    {
-        throw new NotImplementedException();
-    }
+    protected override string TypeDiscriminatorPropertyName => "type";
+    protected override IDictionary<string, Type> DerivedTypes => SpeechDerivedTypes;
 
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    {
-        var jsonObject = JObject.Load(reader);
-        var typeKey = jsonObject["type"] ?? jsonObject["Type"];
-        var typeValue = typeKey.Value<string>();
-        var hasFactory = TypeFactories.ContainsKey(typeValue);
+    protected override IDictionary<string, Func<JsonElement, Type>> DataDrivenTypeFactories =>
+        new Dictionary<string, Func<JsonElement, Type>>();
 
-        if (!hasFactory)
-            throw new Exception(
-                $"unable to deserialize response. " +
-                $"unrecognized output speech type '{typeValue}'"
-            );
-
-        var speech = TypeFactories[typeValue]();
-
-        serializer.Populate(jsonObject.CreateReader(), speech);
-
-        return speech;
-    }
-
-    public override bool CanConvert(Type objectType)
-    {
-        return objectType == typeof(IOutputSpeech);
-    }
+    protected override Func<JsonElement, JsonSerializerOptions, IOutputSpeech?>? CustomConverter => null;
+    public override Type? DefaultType => null;
 }

@@ -7,7 +7,7 @@ namespace Alexa.NET.Response.Converters;
 
 public class DirectiveConverter : BasePolymorphicConverter<IDirective>
 {
-    public static IDictionary<string, Type> DirectiveDeriveTypes = new Dictionary<string, Type>
+    public static IDictionary<string, Type> DirectiveDerivedTypes = new Dictionary<string, Type>
     {
         { AudioPlayerPlayDirective.DirectiveType, typeof(AudioPlayerPlayDirective) },
         { ClearQueueDirective.DirectiveType, typeof(ClearQueueDirective) },
@@ -31,7 +31,7 @@ public class DirectiveConverter : BasePolymorphicConverter<IDirective>
     
     protected override string TypeDiscriminatorPropertyName => "type";
 
-    protected override IDictionary<string, Type> DerivedTypes => DirectiveDeriveTypes;
+    protected override IDictionary<string, Type> DerivedTypes => DirectiveDerivedTypes;
 
     protected override IDictionary<string, Func<JsonElement, Type>> DataDrivenTypeFactories => DirectiveDataDrivenTypeFactories;
 

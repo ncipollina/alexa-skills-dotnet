@@ -1,19 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
 namespace Alexa.NET.Response.Directive.Templates;
 
+[JsonConverter(typeof(ImageSourceConverter))]
 public class ImageSource
 {
-    [JsonProperty("url", Required = Required.Always)]
+    [JsonPropertyName("url"), JsonRequired]
     public string Url { get; set; }
 
-    [JsonProperty("size",NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("size")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Size { get; set; }
 
-    [JsonProperty("widthPixels")]
+    [JsonPropertyName("widthPixels")]
     public int Width { get; set; }
 
-    [JsonProperty("heightPixels")]
+    [JsonPropertyName("heightPixels")]
     public int Height { get; set; }
 
     public bool ShouldSerializeWidth()

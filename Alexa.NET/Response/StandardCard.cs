@@ -5,8 +5,10 @@ namespace Alexa.NET.Response;
 
 public class StandardCard : ICard
 {
+    public const string CardType = "Standard";
+
     [JsonPropertyName("type")]
-    public string Type => "Standard";
+    public string Type => CardType;
 
     [JsonRequired]
     [JsonPropertyName("title")]
