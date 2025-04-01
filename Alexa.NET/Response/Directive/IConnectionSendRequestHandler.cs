@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using System.Text.Json;
 
 namespace Alexa.NET.Response.Directive;
 
 public interface IConnectionSendRequestHandler
 {
-    bool CanCreate(JObject data);
+    bool CanCreate(JsonElement data);
 
-    ConnectionSendRequest Create();
+    Type Create();
 }

@@ -76,47 +76,6 @@ public class ConnectionTaskConverter : BasePolymorphicConverter<IConnectionTask>
         }
     }
 
-    public override IConnectionTask? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType != JsonTokenType.StartObject)
-        {
-            throw new JsonException("Invalid JSON format");
-        }
-
-        using var document = JsonDocument.ParseValue(ref reader);
-        var root = document.RootElement;
-
-        // Look for @type and @version
-        var typeName = root.TryGetProperty(TypeDiscriminatorPropertyName, out var typeProp)
-            ? typeProp.GetString()
-            : null;
-
-        var versionName = root.TryGetProperty("@version", out var versionProp)
-            ? versionProp.GetString()
-            : null;
-
-        var versionKey = $"{typeName}/{versionName}";
-
-        // First, try DerivedTypes dictionary
-        if (DerivedTypes.TryGetValue(versionKey, out var resultType))
-        {
-            return (IConnectionTask)JsonSerializer.Deserialize(root.GetRawText(), resultType, options)!;
-        }
-
-        // If not found, try each registered custom converter
-        foreach (var converter in ConnectionTaskConverters)
-        {
-            if (converter.CanConvert(root))
-            {
-                return converter.Convert(root, options);
-            }
-        }
-
-        throw new JsonException(
-            $"Unable to deserialize response. Unrecognized task type '{typeName}' with version '{versionName}'"
-        );
-    }
-
     protected override Func<JsonElement, string?> KeyResolver => element =>
     {
         // Look for @type and @version
@@ -133,6 +92,14 @@ public class ConnectionTaskConverter : BasePolymorphicConverter<IConnectionTask>
         
         return $"{typeName}/{versionName}";
     };
+
+    protected override Func<JsonElement, JsonSerializerOptions, IConnectionTask?> CustomConverter =>
+        (element, options) =>
+        {
+            // Check task converters
+            var converter = ConnectionTaskConverters.FirstOrDefault(c => c.CanConvert(element));
+            return converter?.Convert(element, options);
+        };
 
     protected override string TypeDiscriminatorPropertyName => "@type";
 

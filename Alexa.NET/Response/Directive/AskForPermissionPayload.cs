@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Response.Directive;
 
@@ -14,12 +14,12 @@ public class AskForPermissionPayload
         PermissionScope = permissionScope;
     }
 
-    [JsonProperty("@type")] 
+    [JsonPropertyName("@type")] 
     public string Type { get; set; } = "AskForPermissionsConsentRequest";
 
-    [JsonProperty("@version")] 
+    [JsonPropertyName("@version")] 
     public string Version { get; set; } = "1";
 
-    [JsonProperty("permissionScope")]
+    [JsonPropertyName("permissionScope")]
     public string PermissionScope { get; set; }
 }

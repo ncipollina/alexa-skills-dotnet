@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Response.Directive;
 
 public class CompleteTaskDirective:IDirective
 {
+    public const string DirectiveType = "Tasks.CompleteTask";
     public CompleteTaskDirective() { }
 
     public CompleteTaskDirective(int statusCode, string statusMessage)
@@ -11,9 +12,9 @@ public class CompleteTaskDirective:IDirective
         Status = new ConnectionStatus(statusCode,statusMessage);
     }
 
-    [JsonProperty("type")]
-    public string Type => "Tasks.CompleteTask";
+    [JsonPropertyName("type")]
+    public string Type => DirectiveType;
 
-    [JsonProperty("status")]
+    [JsonPropertyName("status")]
     public ConnectionStatus Status { get; set; } 
 }

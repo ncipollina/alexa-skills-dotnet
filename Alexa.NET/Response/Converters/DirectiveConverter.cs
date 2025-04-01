@@ -19,54 +19,16 @@ public class DirectiveConverter : BasePolymorphicConverter<IDirective>
         { StopDirective.DirectiveType, typeof(StopDirective) },
         { VideoAppDirective.DirectiveType, typeof(VideoAppDirective) },
         { StartConnectionDirective.DirectiveType, typeof(StartConnectionDirective) },
-        { "Tasks.CompleteTask", typeof(CompleteTaskDirective) },
+        { CompleteTaskDirective.DirectiveType, typeof(CompleteTaskDirective) },
         { DialogUpdateDynamicEntities.DirectiveType, typeof(DialogUpdateDynamicEntities) }
     };
-    
+
     public static Dictionary<string, Func<JsonElement, Type>> DirectiveDataDrivenTypeFactories =
-        new Dictionary<string, Func<JsonElement, Type>>
+        new()
         {
-            {"Connections.SendRequest", ConnectionSendRequestFactory.Create}
+            { ConnectionSendRequest.DirectiveType, ConnectionSendRequestFactory.Create }
         };
     
-    // public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    // {
-    //     throw new NotImplementedException();
-    // }
-    //
-    // public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    // {
-    //     var jsonObject = JObject.Load(reader);
-    //     var typeKey = jsonObject["type"] ?? jsonObject["Type"];
-    //     var typeValue = typeKey.Value<string>();
-    //     var hasTypeFactory = TypeFactories.ContainsKey(typeValue);
-    //     var dataTypeFactory = DirectiveDataDrivenTypeFactories.ContainsKey(typeValue);
-    //
-    //     IDirective directive;
-    //
-    //     if (hasTypeFactory)
-    //     {
-    //         directive = TypeFactories[typeValue]();
-    //     }
-    //     else if(dataTypeFactory)
-    //     {
-    //         directive = DirectiveDataDrivenTypeFactories[typeValue](jsonObject);
-    //     }
-    //     else
-    //     {
-    //         directive = new JsonDirective(typeValue);
-    //     }
-    //
-    //     serializer.Populate(jsonObject.CreateReader(), directive);
-    //
-    //     return directive;
-    // }
-    //
-    // public override bool CanConvert(Type objectType)
-    // {
-    //     return objectType == typeof(IDirective);
-    // }
-
     protected override string TypeDiscriminatorPropertyName => "type";
 
     protected override IDictionary<string, Type> DerivedTypes => DirectiveDeriveTypes;
@@ -74,5 +36,6 @@ public class DirectiveConverter : BasePolymorphicConverter<IDirective>
     protected override IDictionary<string, Func<JsonElement, Type>> DataDrivenTypeFactories => DirectiveDataDrivenTypeFactories;
 
 
+    protected override Func<JsonElement, JsonSerializerOptions, IDirective?>? CustomConverter => null;
     public override Type? DefaultType => typeof(JsonDirective);
 }

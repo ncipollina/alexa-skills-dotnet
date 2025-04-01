@@ -18,6 +18,8 @@ public abstract class BasePolymorphicConverter<T> : JsonConverter<T>
             : null;
         return typeValue;
     };
+    
+    protected abstract Func<JsonElement, JsonSerializerOptions, T?>? CustomConverter { get; }
 
     public abstract Type? DefaultType { get; }
     // public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -66,9 +68,6 @@ public abstract class BasePolymorphicConverter<T> : JsonConverter<T>
         var root = document.RootElement;
     
         var typeValue = KeyResolver(root); 
-            // root.TryGetProperty(TypeDiscriminatorPropertyName, out var typeProp)
-            // ? typeProp.GetString()
-            // : null;
     
         if (string.IsNullOrWhiteSpace(typeValue))
             throw new JsonException("Missing 'type' field");
@@ -82,6 +81,15 @@ public abstract class BasePolymorphicConverter<T> : JsonConverter<T>
         else if (DataDrivenTypeFactories.TryGetValue(typeValue, out var dataFactory))
         {
             resultType = dataFactory(root);
+        }
+        
+        if (resultType is null && CustomConverter is not null)
+        {
+            var customResult = CustomConverter(root, options);
+            if (customResult is not null)
+            {
+                return customResult;
+            }
         }
 
         return resultType is not null

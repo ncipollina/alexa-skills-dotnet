@@ -1,19 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Response.Directive;
 
 public class ConnectionSendRequest<T> : ConnectionSendRequest
 {
-    [JsonProperty("payload")]
+    [JsonPropertyName("payload")]
     public T Payload { get; set; }
 }
 
 public class ConnectionSendRequest:IDirective
 {
-    [JsonProperty("type")] public string Type => "Connections.SendRequest";
+    public const string DirectiveType = "Connections.SendRequest";
+    [JsonPropertyName("type")] public string Type => DirectiveType;
 
-    [JsonProperty("name")] public string Name { get; set; }
+    [JsonPropertyName("name")] public string Name { get; set; }
 
-    [JsonProperty("token")]
+    [JsonPropertyName("token")]
     string Token { get; set; }
 }

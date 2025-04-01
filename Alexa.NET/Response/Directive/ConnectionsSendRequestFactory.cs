@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace Alexa.NET.Response.Directive;
 
@@ -13,7 +13,7 @@ public static class ConnectionSendRequestFactory
     };
 
 
-    public static IDirective Create(JObject data)
+    public static Type Create(JsonElement data)
     {
         var handler = Handlers.FirstOrDefault(h => h.CanCreate(data));
 
@@ -25,5 +25,3 @@ public static class ConnectionSendRequestFactory
         return handler.Create();
     }
 }
-
-public static class ConnectionTaskRequestFactory
