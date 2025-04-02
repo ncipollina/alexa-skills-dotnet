@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request;
 
@@ -11,6 +11,6 @@ public class AuthenticationConfidenceLevelCustomPolicy
         PolicyName = policyName;
     }
 
-    [JsonProperty("policyName")]
+    [JsonPropertyName("policyName")]
     public string PolicyName { get; set; }
 }

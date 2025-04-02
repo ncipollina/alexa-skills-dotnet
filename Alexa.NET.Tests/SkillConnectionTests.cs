@@ -79,17 +79,17 @@ public class SkillConnectionTests
         Assert.IsType<PrintPdfV1>(result.Task.Input);
     }
 
-    // [Fact]
-    // public void LaunchRequestWithCustomTaskDeserializesCorrectly()
-    // {
-    //     ConnectionTaskConverter.AddToConnectionTaskConverters(new ExampleTaskConverter());
-    //     var result = Utility.ExampleFileContent<LaunchRequest>("LaunchRequestWithCustomTask.json");
-    //     Assert.NotNull(result.Task);
-    //     Assert.Equal("Custom.ExampleTask", result.Task.Name);
-    //     Assert.Equal("1", result.Task.Version);
-    //     Assert.IsType<ExampleTask>(result.Task.Input);
-    //     Assert.Equal(((ExampleTask)result.Task.Input).RandomParameter, "parameterValue");
-    // }
+    [Fact]
+    public void LaunchRequestWithCustomTaskDeserializesCorrectly()
+    {
+        ConnectionTaskConverter.AddToConnectionTaskConverters(new ExampleTaskConverter());
+        var result = Utility.ExampleFileContent<LaunchRequest>("LaunchRequestWithCustomTask.json");
+        Assert.NotNull(result.Task);
+        Assert.Equal("Custom.ExampleTask", result.Task.Name);
+        Assert.Equal("1", result.Task.Version);
+        Assert.IsType<ExampleTask>(result.Task.Input);
+        Assert.Equal(((ExampleTask)result.Task.Input).RandomParameter, "parameterValue");
+    }
 
     [Fact]
     public void TestCompleteTaskDirective()

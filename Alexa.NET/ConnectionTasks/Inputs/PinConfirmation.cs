@@ -1,5 +1,5 @@
-﻿using Alexa.NET.Request;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Request;
 
 namespace Alexa.NET.ConnectionTasks.Inputs;
 
@@ -10,7 +10,7 @@ public class PinConfirmation : IConnectionTask
     //https://developer.amazon.com/en-US/docs/alexa/custom-skills/pin-confirmation-for-alexa-skills.html#connections-startconnection-format
     [JsonIgnore] public string ConnectionUri => AssociatedUri;
 
-    [JsonProperty("requestedAuthenticationConfidenceLevel")]
+    [JsonPropertyName("requestedAuthenticationConfidenceLevel")]
     public AuthenticationConfidenceLevel RequestedAuthenticationConfidenceLevel { get; } =
         new AuthenticationConfidenceLevel
         {

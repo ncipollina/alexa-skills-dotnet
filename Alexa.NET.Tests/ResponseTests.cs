@@ -526,35 +526,36 @@ public class ResponseTests
     public void DeserializesExampleResponseJson()
     {
         var deserialized = Utility.ExampleFileContent<SkillResponse>("Response.json");
-
+    
         Assert.Equal("1.0", deserialized.Version);
+    
+        // Safely extract and cast the JsonElement from the object dictionary
+        var raw = (JsonElement)deserialized.SessionAttributes["supportedHoriscopePeriods"];
 
-        var sessionAttributeSupportedHoriscopePeriods =
-            JObject.FromObject(deserialized.SessionAttributes["supportedHoriscopePeriods"]);
-
-        Assert.True(sessionAttributeSupportedHoriscopePeriods.Value<bool>("daily"));
-        Assert.False(sessionAttributeSupportedHoriscopePeriods.Value<bool>("weekly"));
-        Assert.False(sessionAttributeSupportedHoriscopePeriods.Value<bool>("monthly"));
-
+        Assert.Equal(JsonValueKind.Object, raw.ValueKind);
+        Assert.True(raw.GetProperty("daily").GetBoolean());
+        Assert.False(raw.GetProperty("weekly").GetBoolean());
+        Assert.False(raw.GetProperty("monthly").GetBoolean());
+    
         var responseBody = deserialized.Response;
-
+    
         Assert.Equal(false, responseBody.ShouldEndSession);
-
+    
         var outputSpeech = responseBody.OutputSpeech;
-
+    
         Assert.Equal(typeof(PlainTextOutputSpeech), outputSpeech.GetType());
-
+    
         var plainTextOutput = (PlainTextOutputSpeech)outputSpeech;
-
+    
         Assert.Equal("PlainText", plainTextOutput.Type);
         Assert.Equal("Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless. Can I help you with anything else?", plainTextOutput.Text);
-
+    
         var card = responseBody.Card;
-
+    
         Assert.Equal(typeof(SimpleCard), card.GetType());
-
+    
         var simpleCard = (SimpleCard)card;
-
+    
         Assert.Equal("Simple", simpleCard.Type);
         Assert.Equal("Horoscope", simpleCard.Title);
         Assert.Equal("Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless.", simpleCard.Content);

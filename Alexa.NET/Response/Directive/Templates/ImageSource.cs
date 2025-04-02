@@ -3,7 +3,7 @@ using Alexa.NET.Response.Converters;
 
 namespace Alexa.NET.Response.Directive.Templates;
 
-[JsonConverter(typeof(ImageSourceConverter))]
+// [JsonConverter(typeof(ImageSourceConverter))]
 public class ImageSource
 {
     [JsonPropertyName("url"), JsonRequired]

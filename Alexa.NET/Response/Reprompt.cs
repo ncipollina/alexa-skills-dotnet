@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Alexa.NET.Response;
 
@@ -19,14 +22,32 @@ public class Reprompt
         OutputSpeech = new SsmlOutputSpeech {Ssml = speech.ToXml()};
     }
 
-    [JsonProperty("outputSpeech", NullValueHandling=NullValueHandling.Ignore)]
-    public IOutputSpeech OutputSpeech { get; set; }
+    [JsonPropertyName("outputSpeech")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IOutputSpeech? OutputSpeech { get; set; }
 
-    [JsonProperty("directives", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("directives")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IList<IDirective> Directives { get; set; } = new List<IDirective>();
 
     public bool ShouldSerializeDirectives()
     {
         return Directives.Count > 0;
     }
+
+    public static List<Action<JsonTypeInfo>> GetJsonSerializationOptions() =>
+    [
+        ti =>
+        {
+            var prop = ti.Properties.FirstOrDefault(p => p.Name == "directives");
+            if (prop != null)
+            {
+                prop.ShouldSerialize = (obj, _) =>
+                {
+                    var response = (ResponseBody)obj;
+                    return response.Directives is { Count: > 0 };
+                };
+            }
+        }
+    ];
 }

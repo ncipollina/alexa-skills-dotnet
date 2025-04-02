@@ -9,16 +9,17 @@ namespace Alexa.NET.Tests;
 public static class Utility
 {
     private const string ExamplesPath = "Examples";
+    private static JsonSerializerOptions? Options = new(AlexaJsonOptions.DefaultOptions);
 
     public static bool CompareJson(object actual, string expectedFile)
     {
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = false
-        };
+        // var options = new JsonSerializerOptions
+        // {
+        //     WriteIndented = false
+        // };
 
         // Serialize the actual object to JSON
-        var actualJson = JsonSerializer.Serialize(actual, options);
+        var actualJson = JsonSerializer.Serialize(actual, Options);
         using var actualDoc = JsonDocument.Parse(actualJson);
 
         // Read and parse the expected JSON from file
@@ -31,7 +32,7 @@ public static class Utility
     public static T ExampleFileContent<T>(string expectedFile)
     {
         var json = ExampleFileContent(expectedFile);
-        return JsonSerializer.Deserialize<T>(json)!;
+        return JsonSerializer.Deserialize<T>(json, Options)!;
     }
 
     public static string ExampleFileContent(string expectedFile)

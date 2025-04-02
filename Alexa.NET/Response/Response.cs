@@ -1,23 +1,27 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Response;
 
 public class ResponseBody
 {
-    [JsonProperty("outputSpeech", NullValueHandling = NullValueHandling.Ignore)]
-    public IOutputSpeech OutputSpeech { get; set; }
+    [JsonPropertyName("outputSpeech")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IOutputSpeech? OutputSpeech { get; set; }
 
-    [JsonProperty("card", NullValueHandling = NullValueHandling.Ignore)]
-    public ICard Card { get; set; }
+    [JsonPropertyName("card")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ICard? Card { get; set; }
 
-    [JsonProperty("reprompt", NullValueHandling = NullValueHandling.Ignore)]
-    public Reprompt Reprompt { get; set; }
+    [JsonPropertyName("reprompt")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Reprompt? Reprompt { get; set; }
 
     private bool? _shouldEndSession = false;
 
-    [JsonProperty("shouldEndSession", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("shouldEndSession")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? ShouldEndSession
     {
         get
@@ -40,7 +44,8 @@ public class ResponseBody
         set => _shouldEndSession = value;
     }
 
-    [JsonProperty("directives", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("directives")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IList<IDirective> Directives { get; set; } = new List<IDirective>();
 
     public bool ShouldSerializeDirectives()
