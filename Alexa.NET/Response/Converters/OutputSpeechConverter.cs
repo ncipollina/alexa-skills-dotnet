@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Alexa.NET.Response.Converters;
 
@@ -30,6 +27,6 @@ public class OutputSpeechConverter : BasePolymorphicConverter<IOutputSpeech>
     protected override IDictionary<string, Func<JsonElement, Type>> DataDrivenTypeFactories =>
         new Dictionary<string, Func<JsonElement, Type>>();
 
-    protected override Func<JsonElement, JsonSerializerOptions, IOutputSpeech?>? CustomConverter => null;
+    protected override Func<JsonElement, Type?>? CustomTypeResolver => null;
     public override Type? DefaultType => null;
 }

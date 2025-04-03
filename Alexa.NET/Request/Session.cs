@@ -1,22 +1,22 @@
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request;
 
 public class Session
 {
-    [JsonProperty("new")]
+    [JsonPropertyName("new")]
     public bool New { get; set; }
 
-    [JsonProperty("sessionId")]
+    [JsonPropertyName("sessionId")]
     public string SessionId { get; set; }
 
-    [JsonProperty("attributes")]
+    [JsonPropertyName("attributes")]
     public Dictionary<string, object> Attributes { get; set; }
 
-    [JsonProperty("application")]
+    [JsonPropertyName("application")]
     public Application Application { get; set; }
 
-    [JsonProperty("user")]
+    [JsonPropertyName("user")]
     public User User { get; set; }
 }

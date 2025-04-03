@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Alexa.NET.Serialization;
 using JsonElement = System.Text.Json.JsonElement;
 using JsonValueKind = System.Text.Json.JsonValueKind;
 
@@ -13,10 +15,6 @@ public static class Utility
 
     public static bool CompareJson(object actual, string expectedFile)
     {
-        // var options = new JsonSerializerOptions
-        // {
-        //     WriteIndented = false
-        // };
 
         // Serialize the actual object to JSON
         var actualJson = JsonSerializer.Serialize(actual, Options);
@@ -25,8 +23,8 @@ public static class Utility
         // Read and parse the expected JSON from file
         var expectedJson = File.ReadAllText(Path.Combine(ExamplesPath, expectedFile));
         using var expectedDoc = JsonDocument.Parse(expectedJson);
-
-        return JsonElementDeepEquals(expectedDoc.RootElement, actualDoc.RootElement);
+        var diffs = new List<string>();
+        return actualDoc.RootElement.JsonElementDeepEquals(expectedDoc.RootElement, "", diffs);
     }
 
     public static T ExampleFileContent<T>(string expectedFile)
@@ -39,39 +37,59 @@ public static class Utility
     {
         return File.ReadAllText(Path.Combine(ExamplesPath, expectedFile));
     }
-    public static bool JsonElementDeepEquals(this JsonElement a, JsonElement b)
+
+    public static bool JsonElementDeepEquals(this JsonElement a, JsonElement b, string path = "",
+        List<string>? diffs = null)
     {
-        if (a.ValueKind != b.ValueKind) return false;
+        diffs ??= [];
+
+        if (a.ValueKind != b.ValueKind)
+        {
+            diffs.Add($"{path}: Type mismatch ({a.ValueKind} != {b.ValueKind})");
+            return false;
+        }
 
         switch (a.ValueKind)
         {
             case JsonValueKind.Object:
-                var aProperties = a.EnumerateObject().OrderBy(p => p.Name).ToList();
-                var bProperties = b.EnumerateObject().OrderBy(p => p.Name).ToList();
-                if (aProperties.Count != bProperties.Count) return false;
+                var aProps = a.EnumerateObject().OrderBy(p => p.Name).ToList();
+                var bProps = b.EnumerateObject().OrderBy(p => p.Name).ToList();
+                if (aProps.Count != bProps.Count)
+                {
+                    diffs.Add($"{path}: Property count mismatch");
+                    return false;
+                }
 
-                return !aProperties.Where((t, i) => t.Name != bProperties[i].Name ||
-                                                    !t.Value.JsonElementDeepEquals(bProperties[i].Value)).Any();
+                for (var i = 0; i < aProps.Count; i++)
+                {
+                    var name = aProps[i].Name;
+                    var subPath = string.IsNullOrEmpty(path) ? name : $"{path}.{name}";
+                    if (name != bProps[i].Name ||
+                        !JsonElementDeepEquals(aProps[i].Value, bProps[i].Value, subPath, diffs))
+                        return false;
+                }
+
+                return true;
 
             case JsonValueKind.Array:
                 var aArray = a.EnumerateArray().ToList();
                 var bArray = b.EnumerateArray().ToList();
-                if (aArray.Count != bArray.Count) return false;
-
-                for (var i = 0; i < aArray.Count; i++)
+                if (aArray.Count != bArray.Count)
                 {
-                    if (!aArray[i].JsonElementDeepEquals(bArray[i])) return false;
+                    diffs.Add($"{path}: Array length mismatch");
+                    return false;
                 }
-                return true;
 
-            case JsonValueKind.Undefined:
-            case JsonValueKind.String:
-            case JsonValueKind.Number:
-            case JsonValueKind.True:
-            case JsonValueKind.False:
-            case JsonValueKind.Null:
+                return !aArray.Where((t, i) => !JsonElementDeepEquals(t, bArray[i], $"{path}[{i}]", diffs)).Any();
+
             default:
-                return a.ToString() == b.ToString();
+                var equal = a.ToString() == b.ToString();
+                if (!equal)
+                {
+                    diffs.Add($"{path}: Value mismatch '{a}' != '{b}'");
+                }
+
+                return equal;
         }
     }
 }

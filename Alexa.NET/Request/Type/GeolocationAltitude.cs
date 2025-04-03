@@ -1,12 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request.Type;
 
 public class GeolocationAltitude
 {
-    [JsonProperty("altitudeInMeters", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("altitudeInMeters")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double? Altitude { get; set; }
 
-    [JsonProperty("accuracyInMeters",NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("accuracyInMeters")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double? Accuracy { get; set; }
 }

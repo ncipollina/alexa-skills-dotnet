@@ -1,17 +1,21 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Alexa.NET.Request.Type;
 
 //https://developer.amazon.com/en-US/docs/alexa/smapi/voice-permissions-for-reminders.html#send-a-connectionssendrequest-directive
 public class AskForRequestHandler : IConnectionResponseHandler
 {
-    public bool CanCreate(JObject data)
+    public bool CanCreate(JsonElement element)
     {
-        return data.Value<string>("name") == "AskFor";
+        return element.TryGetProperty("name", out var nameProp) &&
+               nameProp.ValueKind == JsonValueKind.String &&
+               nameProp.GetString() == "AskFor";
     }
 
-    public ConnectionResponseRequest Create(JObject data)
+    public System.Type Create(JsonElement element)
     {
-        return new AskForPermissionRequest();
+        return typeof(AskForPermissionRequest);
     }
+
 }

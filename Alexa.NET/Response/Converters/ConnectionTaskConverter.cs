@@ -10,13 +10,13 @@ namespace Alexa.NET.Response.Converters;
 
 public class ConnectionTaskConverter : BasePolymorphicConverter<IConnectionTask>
 {
-    private static readonly List<IConnectionTaskConverter> ConnectionTaskConverters = [new PinConfirmationConverter()];
+    private static readonly List<IConnectionTaskResolver> ConnectionTaskResolvers = [new PinConfirmationResolver()];
 
-    public static void AddToConnectionTaskConverters(IConnectionTaskConverter converter)
+    public static void AddToConnectionTaskResolvers(IConnectionTaskResolver resolver)
     {
-        if (ConnectionTaskConverters.All(rc => rc.GetType() != converter.GetType()))
+        if (ConnectionTaskResolvers.All(rc => rc.GetType() != resolver.GetType()))
         {
-            ConnectionTaskConverters.Add(converter);
+            ConnectionTaskResolvers.Add(resolver);
         }
     }
 
@@ -37,12 +37,12 @@ public class ConnectionTaskConverter : BasePolymorphicConverter<IConnectionTask>
         return $"{typeName}/{versionName}";
     };
 
-    protected override Func<JsonElement, JsonSerializerOptions, IConnectionTask?> CustomConverter =>
-        (element, options) =>
+    protected override Func<JsonElement, Type?> CustomTypeResolver =>
+        element =>
         {
-            // Check task converters
-            var converter = ConnectionTaskConverters.FirstOrDefault(c => c.CanConvert(element));
-            return converter?.Convert(element, options);
+            // Check task resolvers
+            var converter = ConnectionTaskResolvers.FirstOrDefault(c => c.CanResolve(element));
+            return converter?.Resolve(element);
         };
 
     protected override string TypeDiscriminatorPropertyName => "@type";

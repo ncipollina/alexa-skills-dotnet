@@ -1,21 +1,26 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Alexa.NET.Request.Type;
-using Newtonsoft.Json;
 
 namespace Alexa.NET.Request;
 
 public class Geolocation
 {
-    [JsonProperty("locationServices", NullValueHandling = NullValueHandling.Ignore)]
-    public LocationServices LocationServices { get; set; }
-    [JsonProperty("timestamp")]
+    [JsonPropertyName("locationServices")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public LocationServices? LocationServices { get; set; }
+    [JsonPropertyName("timestamp")]
     public DateTimeOffset Timestamp { get; set; }
-    [JsonProperty("coordinate", NullValueHandling = NullValueHandling.Ignore)]
-    public GeolocationCoordinate Coordinate { get; set; }
-    [JsonProperty("altitude",NullValueHandling = NullValueHandling.Ignore)]
-    public GeolocationAltitude Altitude { get; set; }
-    [JsonProperty("heading", NullValueHandling = NullValueHandling.Ignore)]
-    public GeolocationHeading Heading { get; set; }
-    [JsonProperty("speed", NullValueHandling = NullValueHandling.Ignore)]
-    public GeolocationSpeed Speed { get; set; }
+    [JsonPropertyName("coordinate")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GeolocationCoordinate? Coordinate { get; set; }
+    [JsonPropertyName("altitude")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GeolocationAltitude? Altitude { get; set; }
+    [JsonPropertyName("heading")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GeolocationHeading? Heading { get; set; }
+    [JsonPropertyName("speed")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GeolocationSpeed? Speed { get; set; }
 }

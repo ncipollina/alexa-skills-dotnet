@@ -36,6 +36,6 @@ public class DirectiveConverter : BasePolymorphicConverter<IDirective>
     protected override IDictionary<string, Func<JsonElement, Type>> DataDrivenTypeFactories => DirectiveDataDrivenTypeFactories;
 
 
-    protected override Func<JsonElement, JsonSerializerOptions, IDirective?>? CustomConverter => null;
+    protected override Func<JsonElement, Type?>? CustomTypeResolver => null;
     public override Type? DefaultType => typeof(JsonDirective);
 }

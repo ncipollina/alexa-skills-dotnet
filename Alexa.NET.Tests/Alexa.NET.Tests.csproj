@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
 	  <NoWarn>CS0612,CS0618</NoWarn>
 	  <LangVersion>default</LangVersion>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

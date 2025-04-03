@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Alexa.NET.Response;
 using Alexa.NET.Response.Directive;
 using Alexa.NET.Response.Directive.Templates;
 using Alexa.NET.Response.Ssml;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 using JsonSerializer = System.Text.Json.JsonSerializer;

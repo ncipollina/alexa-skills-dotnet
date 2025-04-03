@@ -1,15 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request;
 
 public class Person
 {
-    [JsonProperty("personId")]
+    [JsonPropertyName("personId")]
     public string PersonId { get; set; }
 
-    [JsonProperty("accessToken")]
+    [JsonPropertyName("accessToken")]
     public string AccessToken { get; set; }
 
-    [JsonProperty("authenticationConfidenceLevel",NullValueHandling = NullValueHandling.Ignore)]
-    public AuthenticationConfidenceLevel AuthenticationConfidenceLevel { get; set; }
+    [JsonPropertyName("authenticationConfidenceLevel")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public AuthenticationConfidenceLevel? AuthenticationConfidenceLevel { get; set; }
 }

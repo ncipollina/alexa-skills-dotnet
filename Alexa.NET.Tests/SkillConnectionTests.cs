@@ -82,7 +82,7 @@ public class SkillConnectionTests
     [Fact]
     public void LaunchRequestWithCustomTaskDeserializesCorrectly()
     {
-        ConnectionTaskConverter.AddToConnectionTaskConverters(new ExampleTaskConverter());
+        ConnectionTaskConverter.AddToConnectionTaskResolvers(new ExampleTaskResolver());
         var result = Utility.ExampleFileContent<LaunchRequest>("LaunchRequestWithCustomTask.json");
         Assert.NotNull(result.Task);
         Assert.Equal("Custom.ExampleTask", result.Task.Name);
@@ -208,7 +208,7 @@ public class SkillConnectionTests
     {
         var task = new PinConfirmation();
         var request = Utility.ExampleFileContent<SessionResumedRequest>("PinConfirmationSessionResumed.json");
-        var result = PinConfirmationConverter.ResultFromSessionResumed(request);
+        var result = PinConfirmationResolver.ResultFromSessionResumed(request);
         Assert.Equal(PinConfirmationStatus.NotAchieved,result.Status);
         Assert.Equal(PinConfirmationReason.VerificationMethodNotSetup,result.Reason);
     }

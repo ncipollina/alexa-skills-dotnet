@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using Alexa.NET.Response.Converters;
 
 namespace Alexa.NET.Response.Directive.Templates;
 

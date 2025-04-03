@@ -5,7 +5,7 @@ namespace Alexa.NET.Request;
 
 public class SlotValue
 {
-    [JsonPropertyName("type"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    [JsonPropertyName("type")]
     [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SlotValueType>))]
     public SlotValueType SlotType { get; set; }
 

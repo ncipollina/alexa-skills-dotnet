@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -35,7 +36,8 @@ public class MixedDateTimeConverter : JsonConverter<DateTime>
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        // Write as ISO 8601 string
-        writer.WriteStringValue(value.ToString("O")); // O = round-trip format
-    }
+        // Force UTC and output in expected Zulu format
+        var utc = value.ToUniversalTime();
+        var formatted = utc.ToString("yyyy-MM-ddTHH:mm:ss\\Z", CultureInfo.InvariantCulture);
+        writer.WriteStringValue(formatted);    }
 }

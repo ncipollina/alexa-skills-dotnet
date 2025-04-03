@@ -1,27 +1,29 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request;
 
 public class AlexaSystem
 {
-    [JsonProperty("apiAccessToken")]
+    [JsonPropertyName("apiAccessToken")]
     public string ApiAccessToken { get; set; }
 
-    [JsonProperty("apiEndpoint")]
+    [JsonPropertyName("apiEndpoint")]
     public string ApiEndpoint { get; set; }
 
-    [JsonProperty("application")]
+    [JsonPropertyName("application")]
     public Application Application { get; set; }
 
-    [JsonProperty("person",NullValueHandling = NullValueHandling.Ignore)]
-    public Person Person { get; set; }
+    [JsonPropertyName("person")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Person? Person { get; set; }
 
-    [JsonProperty("user")]
+    [JsonPropertyName("user")]
     public User User { get; set; }
 
-    [JsonProperty("device")]
+    [JsonPropertyName("device")]
     public Device Device { get; set; }
 
-    [JsonProperty("unit",NullValueHandling = NullValueHandling.Ignore)]
-    public Unit Unit { get; set; }
+    [JsonPropertyName("unit")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Unit? Unit { get; set; }
 }

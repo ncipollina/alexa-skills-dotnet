@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request.Type;
 
-public class AccountLinkSkillEventRequest:SkillEventRequest
+public class AccountLinkSkillEventRequest : SkillEventRequest
 {
-    [JsonProperty("body")]
-    public AccountLinkSkillEventDetail Body { get; set; }
+    [JsonPropertyName("body")] public AccountLinkSkillEventDetail Body { get; set; }
 }

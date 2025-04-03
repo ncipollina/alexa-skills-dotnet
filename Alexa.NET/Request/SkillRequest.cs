@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request;
 
 public class SkillRequest
 {
-    [JsonProperty("version")]
+    [JsonPropertyName("version")]
     public string Version { get; set; }
 
-    [JsonProperty("session")]
+    [JsonPropertyName("session")]
     public Session Session { get; set; }
 
-    [JsonProperty("context")]
+    [JsonPropertyName("context")]
     public Context Context { get; set; }
 
-    [JsonProperty("request")]
+    [JsonPropertyName("request")]
     public Type.Request Request { get; set; }
 
     public System.Type GetRequestType()

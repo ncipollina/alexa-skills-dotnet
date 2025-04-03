@@ -1,60 +1,66 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Alexa.NET.Request.Type.Converters;
 
 namespace Alexa.NET.Request.Type;
 
-public class RequestConverter : JsonConverter
+public class RequestConverter : JsonConverter<Request>
 {
-    public static readonly List<IRequestTypeConverter> RequestConverters = new List<IRequestTypeConverter>(new IRequestTypeConverter[]
-    {
-        new DefaultRequestTypeConverter(),
-        new AudioPlayerRequestTypeConverter(),
-        new PlaybackRequestTypeConverter(),
-        new TemplateEventRequestTypeConverter(),
-        new SkillEventRequestTypeConverter(),
-        new SkillConnectionRequestTypeConverter(),
-        new ConnectionResponseTypeConverter()
-    });
-
-    public override bool CanWrite => false;
+    public static readonly List<IRequestTypeResolver> RequestTypeResolvers =
+    [
+        ..new IRequestTypeResolver[]
+        {
+            new DefaultRequestTypeResolver(),
+            new AudioPlayerRequestTypeResolver(),
+            new PlaybackRequestTypeResolver(),
+            new TemplateEventRequestTypeResolver(),
+            new SkillEventRequestTypeResolver(),
+            new SkillConnectionRequestTypeResolver(),
+            new ConnectionResponseTypeResolver()
+        }
+    ];
 
     public override bool CanConvert(System.Type objectType)
     {
         return objectType == typeof(Request);
     }
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public override Request? Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
-    }
-
-    public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, JsonSerializer serializer)
-    {
-        // Load JObject from stream
-        var jObject = JObject.Load(reader);
-
-        // Create target request object based on "type" property
-        var target = Create(jObject);
-
-        // Populate the object properties
-        serializer.Populate(jObject.CreateReader(), target);
-
-        return target;
-    }
-
-    public Request Create(JObject data)
-    {
-        var requestType = data.Value<string>("type");
-        var converter = RequestConverters.FirstOrDefault(c => c.CanConvert(requestType));
-        return converter switch
+        using var document = JsonDocument.ParseValue(ref reader);
+        var root = document.RootElement;
+        if (!root.TryGetProperty("type", out var typeProp))
         {
-            null =>
-                throw new ArgumentOutOfRangeException(nameof(Type), $"Unknown request type: {requestType}."),
-            IDataDrivenRequestTypeConverter dataDriven => dataDriven.Convert(data),
-            _ => converter.Convert(requestType)
+            throw new JsonException("Missing 'type' property in request.");
+        }
+
+        var requestType = typeProp.GetString();
+        if (string.IsNullOrWhiteSpace(requestType))
+        {
+            throw new JsonException("'type' property is null or empty.");
+        }
+       
+        var typeResolver = RequestTypeResolvers.FirstOrDefault(c => c.CanResolve(requestType));
+
+        if (typeResolver is null)
+        {
+            throw new ArgumentOutOfRangeException(nameof(requestType), $"Unknown request type: {requestType}.");
+        }
+        var target = typeResolver switch
+        {
+            null => throw new ArgumentOutOfRangeException(nameof(Type), $"Unknown request type: {requestType}."),
+            IDataDrivenRequestTypeResolver dataDriven => dataDriven.Resolve(root),
+            _ => typeResolver.Resolve(requestType)
         };
+        var json = root.GetRawText();
+        return (Request?)JsonSerializer.Deserialize(json, target, options);
+    }
+
+    public override void Write(Utf8JsonWriter writer, Request value, JsonSerializerOptions options)
+    {
+        JsonSerializer.Serialize(writer, value, value.GetType(), options);
     }
 }

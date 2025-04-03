@@ -28,6 +28,6 @@ public class CardConverter : BasePolymorphicConverter<ICard>
     protected override IDictionary<string, Func<JsonElement, Type>> DataDrivenTypeFactories =>
         new Dictionary<string, Func<JsonElement, Type>>();
 
-    protected override Func<JsonElement, JsonSerializerOptions, ICard?>? CustomConverter => null;
+    protected override Func<JsonElement, Type?>? CustomTypeResolver => null;
     public override Type? DefaultType => null;
 }

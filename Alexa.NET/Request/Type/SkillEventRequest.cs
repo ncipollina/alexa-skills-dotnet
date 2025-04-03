@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Alexa.NET.Helpers;
-using Newtonsoft.Json;
 
 namespace Alexa.NET.Request.Type;
 
 public class SkillEventRequest:Request
 {
-    [JsonProperty("eventCreationTime", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("eventCreationTime")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonConverter(typeof(MixedDateTimeConverter))]
     public DateTime? EventCreationTime { get; set; }
 
-    [JsonProperty("eventPublishingTime", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("eventPublishingTime")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonConverter(typeof(MixedDateTimeConverter))]
     public DateTime? EventPublishingTime { get; set; }
 }

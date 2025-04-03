@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
-using Newtonsoft.Json;
+using Alexa.NET.Serialization;
 using Newtonsoft.Json.Linq;
 using Xunit;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Alexa.NET.Tests;
 
@@ -14,6 +16,7 @@ public class RequestTests
 {
     private const string ExamplesPath = "Examples";
     private const string IntentRequestFile = "IntentRequest.json";
+    private static JsonSerializerOptions _options = new(AlexaJsonOptions.DefaultOptions);
 
     [Fact]
     public void Can_read_IntentRequest_example()
@@ -220,12 +223,12 @@ public class RequestTests
 
     private bool CompareJson(object actual, string expectedFile)
     {
-
-        var actualJObject = JObject.FromObject(actual);
+        var actualJson = JsonSerializer.Serialize(actual, _options);
+        using var actualDoc = JsonDocument.Parse(actualJson);
         var expected = File.ReadAllText(Path.Combine(ExamplesPath, expectedFile));
-        var expectedJObject = JObject.Parse(expected);
-
-        return JToken.DeepEquals(expectedJObject, actualJObject);
+        using var expectedDoc = JsonDocument.Parse(expected);
+        var diffs = new List<string>();
+        return actualDoc.RootElement.JsonElementDeepEquals(expectedDoc.RootElement, "", diffs);
     }
 
     [Fact]
@@ -264,9 +267,9 @@ public class RequestTests
     [Fact]
     public void Can_Handle_New_Intent()
     {
-        if (!RequestConverter.RequestConverters.Any(c => c is NewIntentRequestTypeConverter))
+        if (!RequestConverter.RequestTypeResolvers.Any(c => c is NewIntentRequestTypeResolver))
         {
-            RequestConverter.RequestConverters.Add(new NewIntentRequestTypeConverter());
+            RequestConverter.RequestTypeResolvers.Add(new NewIntentRequestTypeResolver());
         }
 
         var request = GetObjectFromExample<SkillRequest>("NewIntent.json");
@@ -362,6 +365,6 @@ public class RequestTests
     private T GetObjectFromExample<T>(string filename)
     {
         var json = File.ReadAllText(Path.Combine(ExamplesPath, filename));
-        return JsonConvert.DeserializeObject<T>(json);
+        return JsonSerializer.Deserialize<T>(json, _options); 
     }
 }

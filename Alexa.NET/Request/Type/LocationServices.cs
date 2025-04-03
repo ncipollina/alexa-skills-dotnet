@@ -1,12 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
 namespace Alexa.NET.Request.Type;
 
 public class LocationServices
 {
-    [JsonProperty("access")]
+    [JsonPropertyName("access")]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<LocationServiceAccess>))]
     public LocationServiceAccess Access { get; set; }
 
-    [JsonProperty("status")]
+    [JsonPropertyName("status")]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<LocationServiceStatus>))]
     public LocationServiceStatus Status { get; set; }
 }
