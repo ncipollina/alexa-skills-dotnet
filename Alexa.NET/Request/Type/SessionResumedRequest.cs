@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request.Type;
 
 public class SessionResumedRequest:Request
 {
-    [JsonProperty("originIpAddress")]
+    [JsonPropertyName("originIpAddress")]
     public string OriginIpAddress { get; set; }
 
-    [JsonProperty("cause")]
+    [JsonPropertyName("cause")]
     public SessionResumedRequestCause Cause { get; set; }
 }

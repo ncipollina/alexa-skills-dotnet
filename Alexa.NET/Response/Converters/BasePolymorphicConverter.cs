@@ -22,37 +22,41 @@ public abstract class BasePolymorphicConverter<T> : JsonConverter<T>
     protected abstract Func<JsonElement, Type?>? CustomTypeResolver { get; }
 
     public abstract Type? DefaultType { get; }
+
     public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var document = JsonDocument.ParseValue(ref reader);
         var root = document.RootElement;
-    
-        var typeValue = KeyResolver(root); 
-    
-        if (string.IsNullOrWhiteSpace(typeValue))
-            throw new JsonException("Missing 'type' field");
-    
-        var resultType = DefaultType;
-    
-        if (DerivedTypes.TryGetValue(typeValue, out var type))
-        {
-            resultType = type;
-        }
-        else if (DataDrivenTypeFactories.TryGetValue(typeValue, out var dataFactory))
-        {
-            resultType = dataFactory(root);
-        }
-        
-        if (resultType is null && CustomTypeResolver is not null)
+
+        Type? resultType = null;
+        var typeValue = KeyResolver(root);
+
+        if (string.IsNullOrWhiteSpace(typeValue) && CustomTypeResolver is not null)
         {
             resultType = CustomTypeResolver(root);
+        }
+        else
+        {
+            if (string.IsNullOrWhiteSpace(typeValue))
+                throw new JsonException("Missing 'type' field");
+
+            resultType = DefaultType;
+
+            if (DerivedTypes.TryGetValue(typeValue, out var type))
+            {
+                resultType = type;
+            }
+            else if (DataDrivenTypeFactories.TryGetValue(typeValue, out var dataFactory))
+            {
+                resultType = dataFactory(root);
+            }
         }
 
         return resultType is not null
             ? (T)JsonSerializer.Deserialize(root.GetRawText(), resultType, options)!
             : throw new JsonException($"Unrecognized type '{typeValue}'");
     }
-  
+
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
         JsonSerializer.Serialize(writer, value, value.GetType(), options);

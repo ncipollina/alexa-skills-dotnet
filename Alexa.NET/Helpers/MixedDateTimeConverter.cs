@@ -7,7 +7,7 @@ namespace Alexa.NET.Helpers;
 
 public class MixedDateTimeConverter : JsonConverter<DateTime>
 {
-    private static readonly DateTime UnixEpoch = 
+    private static readonly DateTime UnixEpoch =
         new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -20,6 +20,7 @@ public class MixedDateTimeConverter : JsonConverter<DateTime>
                 {
                     return parsed;
                 }
+
                 throw new JsonException($"Invalid date string: {stringValue}");
 
             case JsonTokenType.Number:
@@ -27,6 +28,7 @@ public class MixedDateTimeConverter : JsonConverter<DateTime>
                 {
                     return UnixEpoch.AddMilliseconds(epoch);
                 }
+
                 throw new JsonException("Invalid epoch format");
 
             default:
@@ -36,8 +38,15 @@ public class MixedDateTimeConverter : JsonConverter<DateTime>
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        // Force UTC and output in expected Zulu format
-        var utc = value.ToUniversalTime();
+        DateTime utc;
+
+        // If it’s unspecified, treat it as UTC; otherwise convert it to UTC.
+        utc = value.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(value, DateTimeKind.Utc)
+            : value.ToUniversalTime();
+
+        // Format as ISO 8601 with "Z"
         var formatted = utc.ToString("yyyy-MM-ddTHH:mm:ss\\Z", CultureInfo.InvariantCulture);
-        writer.WriteStringValue(formatted);    }
+        writer.WriteStringValue(formatted);
+    }
 }

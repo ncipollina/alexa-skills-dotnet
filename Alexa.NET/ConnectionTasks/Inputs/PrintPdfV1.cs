@@ -12,7 +12,7 @@ public class PrintPdfV1 : IConnectionTask
 
     [JsonIgnore] public string ConnectionUri => AssociatedUri;
 
-    [JsonPropertyName("@type")] public string Type => ConnectionKey;
+    [JsonPropertyName("@type")] public string Type => ConnectionType;
 
     [JsonPropertyName("context")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

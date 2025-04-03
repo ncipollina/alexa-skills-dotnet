@@ -12,7 +12,7 @@ public class ScheduleFoodEstablishmentReservation:IConnectionTask
     public const string ConnectionKey = $"{ConnectionType}/{VersionNumber}";
 
     public const string AssociatedUri = "connection://AMAZON.ScheduleFoodEstablishmentReservation/1";
-    [System.Text.Json.Serialization.JsonIgnore]
+    [JsonIgnore]
     public string ConnectionUri => AssociatedUri;
 
     [JsonPropertyName("@type")] public string Type => ConnectionType;
@@ -25,7 +25,7 @@ public class ScheduleFoodEstablishmentReservation:IConnectionTask
 
     [JsonPropertyName("partySize")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int PartySize { get; set; }
+    public int? PartySize { get; set; }
 
     [JsonPropertyName("startTime")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

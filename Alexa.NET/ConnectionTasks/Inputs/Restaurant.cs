@@ -1,18 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.ConnectionTasks.Inputs;
 
 public class Restaurant
 {
-    [JsonProperty("@type")]
+    [JsonPropertyName("@type")]
     public string Type => "Restaurant";
 
-    [JsonProperty("@version")]
+    [JsonPropertyName("@version")]
     public string Version => 1.ToString();
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
-    [JsonProperty("location")]
+    [JsonPropertyName("location")]
     public PostalAddress Location { get; set; }
 }
