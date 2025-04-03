@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.ConnectionTasks.Inputs
+namespace Alexa.NET.ConnectionTasks.Inputs;
+
+public class PostalAddress
 {
-    public class PostalAddress
-    {
-        [JsonProperty("@type")] public string Type => "PostalAddress";
-        [JsonProperty("@version")] public string Version = 1.ToString();
-        [JsonProperty("streetAddress")] public string StreetAddress { get; set; }
-        [JsonProperty("locality")] public string Locality { get; set; }
-        [JsonProperty("region")] public string Region { get; set; }
-        [JsonProperty("postalCode")] public string PostalCode { get; set; }
-        [JsonProperty("country", NullValueHandling = NullValueHandling.Ignore)] public string Country { get; set; }
-    }
+    [JsonPropertyName("@type")] public string Type => "PostalAddress";
+    [JsonPropertyName("@version")] public string Version => 1.ToString();
+    [JsonPropertyName("streetAddress")] public string StreetAddress { get; set; }
+    [JsonPropertyName("locality")] public string Locality { get; set; }
+    [JsonPropertyName("region")] public string Region { get; set; }
+    [JsonPropertyName("postalCode")] public string PostalCode { get; set; }
+    [JsonPropertyName("country")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Country { get; set; }
 }

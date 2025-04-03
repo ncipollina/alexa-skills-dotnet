@@ -1,33 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using System;
+using System.Text.Json.Serialization;
 using Alexa.NET.Helpers;
-using Newtonsoft.Json;
 
-namespace Alexa.NET.ConnectionTasks.Inputs
+namespace Alexa.NET.ConnectionTasks.Inputs;
+
+public class ScheduleFoodEstablishmentReservation:IConnectionTask
 {
-    public class ScheduleFoodEstablishmentReservation:IConnectionTask
-    {
-        public const string AssociatedUri = "connection://AMAZON.ScheduleFoodEstablishmentReservation/1";
-        [JsonIgnore]
-        public string ConnectionUri => AssociatedUri;
+    public const string ConnectionType = "ScheduleFoodEstablishmentReservationRequest";
+    public const string VersionNumber = "1";
+    public const string ConnectionKey = $"{ConnectionType}/{VersionNumber}";
 
-        [JsonProperty("@type")]
-        public string Type => "ScheduleFoodEstablishmentReservationRequest";
+    public const string AssociatedUri = "connection://AMAZON.ScheduleFoodEstablishmentReservation/1";
+    [JsonIgnore]
+    public string ConnectionUri => AssociatedUri;
 
-        [JsonProperty("@version")]
-        public string Version => 1.ToString();
+    [JsonPropertyName("@type")] public string Type => ConnectionType;
 
-        [JsonProperty("context", NullValueHandling = NullValueHandling.Ignore)]
-        public ConnectionTaskContext Context { get; set; }
+    [JsonPropertyName("@version")] public string Version => VersionNumber;
 
-        [JsonProperty("partySize",NullValueHandling = NullValueHandling.Ignore)]
-        public int PartySize { get; set; }
+    [JsonPropertyName("context")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ConnectionTaskContext Context { get; set; }
 
-        [JsonProperty("startTime",NullValueHandling = NullValueHandling.Ignore),JsonConverter(typeof(MixedDateTimeConverter))]
-        public DateTime? StartTime { get; set; }
+    [JsonPropertyName("partySize")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? PartySize { get; set; }
 
-        [JsonProperty("restaurant")]
-        public Restaurant Restaurant { get; set; }
-    }
+    [JsonPropertyName("startTime")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonConverter(typeof(MixedDateTimeConverter))]
+    public DateTime? StartTime { get; set; }
+
+    [JsonPropertyName("restaurant")]
+    public Restaurant Restaurant { get; set; }
 }

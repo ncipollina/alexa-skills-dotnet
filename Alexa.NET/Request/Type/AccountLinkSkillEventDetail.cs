@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class AccountLinkSkillEventDetail
 {
-    public class AccountLinkSkillEventDetail
-    {
-        [JsonProperty("accessToken")]
-        public string AccessToken { get; set; }
-    }
+    [JsonPropertyName("accessToken")]
+    public string AccessToken { get; set; }
 }

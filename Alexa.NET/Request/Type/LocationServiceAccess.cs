@@ -1,12 +1,11 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public enum LocationServiceAccess
 {
-    public enum LocationServiceAccess
-    {
-        [EnumMember(Value = "ENABLED")]
-        Enabled,
-        [EnumMember(Value = "DISABLED")]
-        Disabled
-    }
+    [EnumMember(Value = "ENABLED")]
+    Enabled,
+    [EnumMember(Value = "DISABLED")]
+    Disabled
 }

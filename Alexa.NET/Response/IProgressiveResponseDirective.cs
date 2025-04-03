@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+[JsonConverter(typeof(ProgressiveResponseDirectiveConverter))]
+public interface IProgressiveResponseDirective
 {
-    public interface IProgressiveResponseDirective
-    {
-        [JsonRequired]
-        string Type { get; }
-    }
+    string Type { get; }
 }

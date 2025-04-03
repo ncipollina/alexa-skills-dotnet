@@ -1,16 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class GeolocationCoordinate
 {
-    public class GeolocationCoordinate
-    {
-        [JsonProperty("latitudeInDegrees")]
-        public double Latitude { get; set; }
+    [JsonPropertyName("latitudeInDegrees")]
+    public double Latitude { get; set; }
 
-        [JsonProperty("longitudeInDegrees")]
-        public double Longitude { get; set; }
+    [JsonPropertyName("longitudeInDegrees")]
+    public double Longitude { get; set; }
 
-        [JsonProperty("accuracyInMeters")]
-        public double Accuracy { get; set; }
-    }
+    [JsonPropertyName("accuracyInMeters")]
+    public double Accuracy { get; set; }
 }

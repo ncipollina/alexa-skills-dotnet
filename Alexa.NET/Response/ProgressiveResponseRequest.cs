@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+public class ProgressiveResponseRequest
 {
-    public class ProgressiveResponseRequest
+    public ProgressiveResponseRequest()
     {
-        public ProgressiveResponseRequest()
-        {
-        }
-
-        public ProgressiveResponseRequest(ProgressiveResponseHeader header, IProgressiveResponseDirective directive)
-        {
-            Header = header;
-            Directive = directive;
-        }
-
-        [JsonProperty("header")]
-        public ProgressiveResponseHeader Header { get; set; }
-
-        [JsonProperty("directive")]
-        public IProgressiveResponseDirective Directive { get; set; }
     }
+
+    public ProgressiveResponseRequest(ProgressiveResponseHeader header, IProgressiveResponseDirective directive)
+    {
+        Header = header;
+        Directive = directive;
+    }
+
+    [JsonPropertyName("header")]
+    public ProgressiveResponseHeader Header { get; set; }
+
+    [JsonPropertyName("directive")]
+    public IProgressiveResponseDirective Directive { get; set; }
 }

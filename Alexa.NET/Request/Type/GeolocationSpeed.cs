@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class GeolocationSpeed
 {
-    public class GeolocationSpeed
-    {
-        [JsonProperty("speedInMetersPerSecond")]
-        public double? Speed { get; set; }
-        [JsonProperty("accuracyInMetresPerSecond")]
-        public double? Accuracy { get; set; }
-    }
+    [JsonPropertyName("speedInMetersPerSecond")]
+    public double? Speed { get; set; }
+    [JsonPropertyName("accuracyInMetresPerSecond")]
+    public double? Accuracy { get; set; }
 }

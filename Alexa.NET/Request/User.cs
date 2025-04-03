@@ -1,16 +1,15 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public class User
 {
-    public class User
-    {
-        [JsonProperty("userId")]
-        public string UserId { get; set; }
+    [JsonPropertyName("userId")]
+    public string UserId { get; set; }
 
-        [JsonProperty("accessToken")]
-        public string AccessToken { get; set; }
+    [JsonPropertyName("accessToken")]
+    public string AccessToken { get; set; }
 
-        [JsonProperty("permissions")]
-        public Permissions Permissions { get; set; }
-    }
+    [JsonPropertyName("permissions")]
+    public Permissions Permissions { get; set; }
 }

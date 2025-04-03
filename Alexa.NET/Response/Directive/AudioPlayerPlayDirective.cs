@@ -1,20 +1,21 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class AudioPlayerPlayDirective : IDirective
 {
-    public class AudioPlayerPlayDirective : IDirective
-    {
-        [JsonProperty("playBehavior")]
-        [JsonRequired]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PlayBehavior PlayBehavior { get; set; }
+    public const string DirectiveType = "AudioPlayer.Play";
 
-        [JsonProperty("audioItem")]
-        [JsonRequired]
-        public AudioItem AudioItem { get; set; }
+    [JsonPropertyName("playBehavior")]
+    [JsonRequired]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PlayBehavior>))]
+    public PlayBehavior PlayBehavior { get; set; }
 
-        [JsonProperty("type")]
-        public string Type => "AudioPlayer.Play";
-    }
+    [JsonPropertyName("audioItem")]
+    [JsonRequired]
+    public AudioItem AudioItem { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type => DirectiveType;
 }

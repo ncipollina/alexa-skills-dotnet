@@ -1,15 +1,14 @@
-﻿namespace Alexa.NET.Response.Directive
-{
-    public class AskForPermissionDirective : ConnectionSendRequest<AskForPermissionPayload>
-    {
-        public AskForPermissionDirective()
-        {
-            
-        }
+﻿namespace Alexa.NET.Response.Directive;
 
-        public AskForPermissionDirective(string permissionScope)
-        {
-            this.Payload = new AskForPermissionPayload(permissionScope);
-        }
+public class AskForPermissionDirective : ConnectionSendRequest<AskForPermissionPayload>
+{
+    public AskForPermissionDirective()
+    {
+            
+    }
+
+    public AskForPermissionDirective(string permissionScope)
+    {
+        this.Payload = new AskForPermissionPayload(permissionScope);
     }
 }

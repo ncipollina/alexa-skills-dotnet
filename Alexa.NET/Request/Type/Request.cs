@@ -1,22 +1,22 @@
-using Newtonsoft.Json;
 using System;
+using System.Text.Json.Serialization;
 using Alexa.NET.Helpers;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+[JsonConverter(typeof(RequestConverter))]
+public abstract class Request
 {
-    [JsonConverter(typeof(RequestConverter))]
-    public abstract class Request
-    {
-        [JsonProperty("type",Required = Required.Always)]
-        public string Type { get; set; }
+    [JsonPropertyName("type")]
+    [JsonRequired]
+    public string Type { get; set; }
 
-        [JsonProperty("requestId")]
-        public string RequestId { get; set; }
+    [JsonPropertyName("requestId")]
+    public string RequestId { get; set; }
 
-        [JsonProperty("locale")]
-        public string Locale { get; set; }
+    [JsonPropertyName("locale")]
+    public string Locale { get; set; }
 
-        [JsonProperty("timestamp"),JsonConverter(typeof(MixedDateTimeConverter))]
-        public DateTime Timestamp { get; set; }
-    }
+    [JsonPropertyName("timestamp"),JsonConverter(typeof(MixedDateTimeConverter))]
+    public DateTime Timestamp { get; set; }
 }

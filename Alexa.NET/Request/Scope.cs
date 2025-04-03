@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public class Scope
 {
-    public class Scope
-    {
-        [JsonProperty("status")]
-        public string Status { get; set; }
-    }
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
 }

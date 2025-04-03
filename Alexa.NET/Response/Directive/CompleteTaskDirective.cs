@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Alexa.NET.ConnectionTasks;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class CompleteTaskDirective:IDirective
 {
-    public class CompleteTaskDirective:IDirective
+    public const string DirectiveType = "Tasks.CompleteTask";
+    public CompleteTaskDirective() { }
+
+    public CompleteTaskDirective(int statusCode, string statusMessage)
     {
-        public CompleteTaskDirective() { }
-
-        public CompleteTaskDirective(int statusCode, string statusMessage)
-        {
-            Status = new ConnectionStatus(statusCode,statusMessage);
-        }
-
-        [JsonProperty("type")]
-        public string Type => "Tasks.CompleteTask";
-
-        [JsonProperty("status")]
-        public ConnectionStatus Status { get; set; } 
+        Status = new ConnectionStatus(statusCode,statusMessage);
     }
+
+    [JsonPropertyName("type")]
+    public string Type => DirectiveType;
+
+    [JsonPropertyName("status")]
+    public ConnectionStatus Status { get; set; } 
 }

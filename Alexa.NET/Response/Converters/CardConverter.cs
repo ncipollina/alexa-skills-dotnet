@@ -1,53 +1,33 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.Json;
 
-namespace Alexa.NET.Response.Converters
+namespace Alexa.NET.Response.Converters;
+
+public class CardConverter : BasePolymorphicConverter<ICard>
 {
-    public class CardConverter : JsonConverter
+    public static Dictionary<string, Type> CardDerivedTypes = new()
     {
-        public override bool CanWrite => false;
+        { SimpleCard.CardType, typeof(SimpleCard) },
+        { StandardCard.CardType, typeof(StandardCard) },
+        { LinkAccountCard.CardType, typeof(LinkAccountCard) },
+        { AskForPermissionsConsentCard.CardType, typeof(AskForPermissionsConsentCard) }
+    };
+    
+    protected override Func<JsonElement, string?> KeyResolver => element =>
+    {
+        static string? GetProp(JsonElement el, string name) =>
+            el.TryGetProperty(name, out var prop) ? prop.GetString() : null;
 
-        public override bool CanRead => true;
+        return GetProp(element, TypeDiscriminatorPropertyName) ?? GetProp(element, "Type");
+    };
 
-        public static Dictionary<string, Func<ICard>> TypeFactories = new Dictionary<string, Func<ICard>>
-        {
-            { "Simple", () => new SimpleCard() },
-            { "Standard", () => new StandardCard() },
-            { "LinkAccount", () => new LinkAccountCard() },
-            { "AskForPermissionsConsent", () => new AskForPermissionsConsentCard() }
-        };
+    protected override string TypeDiscriminatorPropertyName => "type";
+    protected override IDictionary<string, Type> DerivedTypes => CardDerivedTypes;
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
+    protected override IDictionary<string, Func<JsonElement, Type>> DataDrivenTypeFactories =>
+        new Dictionary<string, Func<JsonElement, Type>>();
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var jsonObject = JObject.Load(reader);
-            var typeKey = jsonObject["type"] ?? jsonObject["Type"];
-            var typeValue = typeKey.Value<string>();
-            var hasFactory = TypeFactories.ContainsKey(typeValue);
-
-            if (!hasFactory)
-                throw new Exception(
-                    $"unable to deserialize response. " +
-                    $"unrecognized card type '{typeValue}'"
-                );
-
-            var card = TypeFactories[typeValue]();
-
-            serializer.Populate(jsonObject.CreateReader(), card);
-
-            return card;
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(ICard);
-        }
-    }
+    protected override Func<JsonElement, Type?>? CustomTypeResolver => null;
+    public override Type? DefaultType => null;
 }

@@ -1,22 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class ConnectionResponseRequest<T> : ConnectionResponseRequest
 {
-    public class ConnectionResponseRequest<T> : ConnectionResponseRequest
-    {
-        [JsonProperty("payload")]
-        public T Payload { get; set; }
-    }
+    [JsonPropertyName("payload")]
+    public T Payload { get; set; }
+}
 
-    public class ConnectionResponseRequest:Request
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+public class ConnectionResponseRequest:Request
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonProperty("status")]
-        public ConnectionStatus Status { get; set; }
+    [JsonPropertyName("status")]
+    public ConnectionStatus Status { get; set; }
 
-        [JsonProperty("token")]
-        public string Token { get; set; }
-    }
+    [JsonPropertyName("token")]
+    public string Token { get; set; }
 }

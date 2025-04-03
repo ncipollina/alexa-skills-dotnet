@@ -1,13 +1,12 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public class Unit
 {
-    public class Unit
-    {
-        [JsonProperty("unitId")]
-        public string UnitID { get; set; }
+    [JsonPropertyName("unitId")]
+    public string UnitID { get; set; }
 
-        [JsonProperty("persistentUnitId")]
-        public string PersistentUnitID { get; set; }
-    }
+    [JsonPropertyName("persistentUnitId")]
+    public string PersistentUnitID { get; set; }
 }

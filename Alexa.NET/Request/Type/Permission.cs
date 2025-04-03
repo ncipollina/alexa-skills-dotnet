@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class Permission
 {
-    public class Permission
-    {
-        [JsonProperty("scope")]
-        public string Scope { get; set; }
-    }
+    [JsonPropertyName("scope")]
+    public string Scope { get; set; }
 }

@@ -1,15 +1,15 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class SessionEndedRequest : Request
 {
-    public class SessionEndedRequest : Request
-    {
-        [JsonProperty("reason")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Reason Reason { get; set; }
+    [JsonPropertyName("reason")]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<Reason>))]
+    public Reason Reason { get; set; }
 
-        [JsonProperty("error",NullValueHandling=NullValueHandling.Ignore)]
-        public Error Error { get; set; }
-    }
+    [JsonPropertyName("error")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Error? Error { get; set; }
 }

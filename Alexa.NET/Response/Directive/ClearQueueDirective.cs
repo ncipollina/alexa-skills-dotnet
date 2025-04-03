@@ -1,20 +1,17 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class ClearQueueDirective : IDirective
 {
-    public class ClearQueueDirective : IDirective
-    {
-        [JsonProperty("type")]
-        public string Type => "AudioPlayer.ClearQueue";
+    public const string DirectiveType = "AudioPlayer.ClearQueue";
 
-        [JsonProperty("clearBehavior")]
-        [JsonRequired]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ClearBehavior ClearBehavior { get; set; }
-    }
+    [JsonPropertyName("type")]
+    public string Type => DirectiveType;
+
+    [JsonPropertyName("clearBehavior")]
+    [JsonRequired]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ClearBehavior>))]
+    public ClearBehavior ClearBehavior { get; set; }
 }

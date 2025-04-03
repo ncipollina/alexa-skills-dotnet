@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public enum ClearBehavior
 {
-    public enum ClearBehavior
-    {
-        [EnumMember(Value = "CLEAR_ENQUEUED")]
-        ClearEnqueued,
-        [EnumMember(Value = "CLEAR_ALL")]
-        ClearAll
-    }
+    [EnumMember(Value = "CLEAR_ENQUEUED")]
+    ClearEnqueued,
+    [EnumMember(Value = "CLEAR_ALL")]
+    ClearAll
 }

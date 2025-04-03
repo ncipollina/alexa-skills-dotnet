@@ -1,17 +1,16 @@
-﻿using Alexa.NET.Response.Directive.Templates;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Directive.Templates;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class ListItem
 {
-    public class ListItem
-    {
-        [JsonProperty("token")]
-        public string Token { get; set; }
+    [JsonPropertyName("token")]
+    public string Token { get; set; }
         
-        [JsonProperty("image")]
-        public TemplateImage Image { get; set; }
+    [JsonPropertyName("image")]
+    public TemplateImage Image { get; set; }
         
-        [JsonProperty("textContent")]
-        public TemplateContent Content { get; set; }
-    }
+    [JsonPropertyName("textContent")]
+    public TemplateContent Content { get; set; }
 }

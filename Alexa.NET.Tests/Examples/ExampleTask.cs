@@ -1,12 +1,11 @@
-﻿using Alexa.NET.ConnectionTasks;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.ConnectionTasks;
 
-namespace Alexa.NET.Tests.Examples
+namespace Alexa.NET.Tests.Examples;
+
+public class ExampleTask : IConnectionTask
 {
-    public class ExampleTask : IConnectionTask
-    {
-        public string ConnectionUri { get; set; }
-        [JsonProperty("randomParameter")]
-        public string RandomParameter { get; set; }
-    }
+    public string ConnectionUri { get; set; }
+    [JsonPropertyName("randomParameter")]
+    public string RandomParameter { get; set; }
 }

@@ -1,7 +1,5 @@
-﻿using System;
-namespace Alexa.NET.Response.Ssml
+﻿namespace Alexa.NET.Response.Ssml;
+
+public interface ICommonSsml:ISsml,IParagraphSsml,ISentenceSsml
 {
-    public interface ICommonSsml:ISsml,IParagraphSsml,ISentenceSsml
-    {
-    }
 }

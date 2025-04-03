@@ -1,6 +1,5 @@
-﻿namespace Alexa.NET.Request.Type
+﻿namespace Alexa.NET.Request.Type;
+
+public class AskForPermissionRequest : ConnectionResponseRequest<AskForPermissionRequestPayload>
 {
-    public class AskForPermissionRequest : ConnectionResponseRequest<AskForPermissionRequestPayload>
-    {
-    }
 }

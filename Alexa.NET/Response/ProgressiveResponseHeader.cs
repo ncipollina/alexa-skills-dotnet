@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+public class ProgressiveResponseHeader
 {
-    public class ProgressiveResponseHeader
+    public ProgressiveResponseHeader(string requestId)
     {
-        public ProgressiveResponseHeader(string requestId)
-        {
-            RequestId = requestId;
-        }
-
-        [JsonProperty("requestId")]
-        public string RequestId { get; }
+        RequestId = requestId;
     }
+
+    [JsonPropertyName("requestId")]
+    public string RequestId { get; }
 }

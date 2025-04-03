@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class SkillEventPersistenceStatus
 {
-    public class SkillEventPersistenceStatus
-    {
-        [JsonProperty("userInformationPersistenceStatus"),
-         JsonConverter(typeof(StringEnumConverter))]
-        public PersistenceStatus Status { get; set; }
-    }
+    [JsonPropertyName("userInformationPersistenceStatus"),
+     JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PersistenceStatus>))]
+    public PersistenceStatus Status { get; set; }
 }

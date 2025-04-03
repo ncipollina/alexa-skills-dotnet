@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request
+namespace Alexa.NET.Request;
+
+public class Permissions
 {
-    public class Permissions
-    {
-        [JsonProperty("consentToken"),Obsolete("ConsentToken is deprecated, please use SkillRequest.Context.System.ApiAccessToken")]
-        public string ConsentToken { get; set; }
+    [JsonPropertyName("consentToken"),Obsolete("ConsentToken is deprecated, please use SkillRequest.Context.System.ApiAccessToken")]
+    public string ConsentToken { get; set; }
 
-        [JsonProperty("scopes", NullValueHandling = NullValueHandling.Ignore)]
-        public Dictionary<string, Scope> Scopes { get; set; }
-    }
+    [JsonPropertyName("scopes")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Dictionary<string, Scope>? Scopes { get; set; }
 }

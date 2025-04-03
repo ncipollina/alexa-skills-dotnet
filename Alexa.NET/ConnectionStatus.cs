@@ -1,21 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET
+namespace Alexa.NET;
+
+public class ConnectionStatus
 {
-    public class ConnectionStatus
+    public ConnectionStatus() { }
+
+    public ConnectionStatus(int code, string message)
     {
-        public ConnectionStatus() { }
-
-        public ConnectionStatus(int code, string message)
-        {
-            Code = code;
-            Message = message;
-        }
-
-        [JsonProperty("code")]
-        public int Code { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; }
+        Code = code;
+        Message = message;
     }
+
+    [JsonPropertyName("code")]
+    public int Code { get; set; }
+
+    [JsonPropertyName("message")]
+    public string Message { get; set; }
 }

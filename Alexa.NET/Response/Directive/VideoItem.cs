@@ -1,18 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Response.Directive
+namespace Alexa.NET.Response.Directive;
+
+public class VideoItem
 {
-    public class VideoItem
+    public VideoItem(string source)
     {
-        public VideoItem(string source)
-        {
-            Source = source;
-        }
-
-        [JsonProperty("source", Required = Required.Always)]
-        public string Source { get; set; }
-
-        [JsonProperty("metadata", NullValueHandling = NullValueHandling.Ignore)]
-        public VideoItemMetadata Metadata { get; set; }
+        Source = source;
     }
+
+    [JsonPropertyName("source")]
+    [JsonRequired]
+    public string Source { get; set; }
+
+    [JsonPropertyName("metadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public VideoItemMetadata Metadata { get; set; }
 }

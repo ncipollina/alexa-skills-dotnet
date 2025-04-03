@@ -1,16 +1,15 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 
-namespace Alexa.NET.ConnectionTasks.Inputs
+namespace Alexa.NET.ConnectionTasks.Inputs;
+
+public class PinConfirmationResult
 {
-    public class PinConfirmationResult
-    {
-        [JsonProperty("status",NullValueHandling = NullValueHandling.Ignore)]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PinConfirmationStatus Status { get; set; }
+    [JsonPropertyName("status")]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PinConfirmationStatus>))]
+    public PinConfirmationStatus Status { get; set; }
 
-        [JsonProperty("reason",NullValueHandling = NullValueHandling.Ignore)]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PinConfirmationReason Reason { get; set; }
-    }
+    [JsonPropertyName("reason")]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PinConfirmationReason>))]
+    public PinConfirmationReason Reason { get; set; }
 }

@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class GeolocationHeading
 {
-    public class GeolocationHeading
-    {
-        [JsonProperty("directionInDegrees",NullValueHandling = NullValueHandling.Ignore)]
-        public double? Direction { get; set; }
-        [JsonProperty("accuracyInDegrees", NullValueHandling = NullValueHandling.Ignore)]
-        public double? Accuracy { get; set; }
-    }
+    [JsonPropertyName("directionInDegrees")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public double? Direction { get; set; }
+    [JsonPropertyName("accuracyInDegrees")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public double? Accuracy { get; set; }
 }

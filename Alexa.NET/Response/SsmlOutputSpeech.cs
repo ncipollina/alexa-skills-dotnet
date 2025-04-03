@@ -1,34 +1,32 @@
+using System.Text.Json.Serialization;
+using Alexa.NET.Response.Converters;
 using Alexa.NET.Response.Directive;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
-namespace Alexa.NET.Response
+namespace Alexa.NET.Response;
+
+public class SsmlOutputSpeech : IOutputSpeech
 {
-    public class SsmlOutputSpeech : IOutputSpeech
+    public const string SpeechType = "SSML";
+
+    public SsmlOutputSpeech()
     {
-        public SsmlOutputSpeech()
-        {
 
-        }
-
-        public SsmlOutputSpeech(string ssml)
-        {
-            Ssml = ssml;
-        }
-
-        [JsonRequired]
-        [JsonProperty("type")]
-        public string Type
-        {
-            get { return "SSML"; }
-        }
-
-        [JsonRequired]
-        [JsonProperty("ssml")]
-        public string Ssml { get; set; }
-
-        [JsonProperty("playBehavior", NullValueHandling = NullValueHandling.Ignore)]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PlayBehavior? PlayBehavior { get; set; }
     }
+
+    public SsmlOutputSpeech(string ssml)
+    {
+        Ssml = ssml;
+    }
+
+    [JsonPropertyName("type")]
+    public string Type => SpeechType;
+
+    [JsonRequired]
+    [JsonPropertyName("ssml")]
+    public string Ssml { get; set; }
+
+    [JsonPropertyName("playBehavior")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PlayBehavior>))]
+    public PlayBehavior? PlayBehavior { get; set; }
 }

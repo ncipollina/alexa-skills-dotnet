@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.Request.Type
+namespace Alexa.NET.Request.Type;
+
+public class PermissionSkillEventRequest : SkillEventRequest
 {
-    public class PermissionSkillEventRequest:SkillEventRequest
-    {
-        [JsonProperty("body")]
-        public SkillEventPermissions Body { get; set; }
-    }
+    [JsonPropertyName("body")] public SkillEventPermissions Body { get; set; }
 }

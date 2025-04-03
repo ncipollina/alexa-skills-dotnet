@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Alexa.NET.ConnectionTasks
+namespace Alexa.NET.ConnectionTasks;
+
+public class ConnectionTaskContext
 {
-    public class ConnectionTaskContext
-    {
-        [JsonProperty("providerId")]
-        public string ProviderId { get; set; }
-    }
+    [JsonPropertyName("providerId")]
+    public string ProviderId { get; set; }
 }
