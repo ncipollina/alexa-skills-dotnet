@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request.Type;
 
 public class SkillEnablementSkillEventRequest: SkillEventRequest
 {
-    [JsonProperty("body",NullValueHandling = NullValueHandling.Ignore)]
-    public SkillEventPersistenceStatus Body { get; set; }
+    [JsonPropertyName("body")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public SkillEventPersistenceStatus? Body { get; set; }
 }

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request.Type;
 
 public class ErrorCause
 {
-    [JsonProperty("requestId")]
-    public string requestId { get; set; }
+    [JsonPropertyName("requestId")]
+    public string RequestId { get; set; }
 }

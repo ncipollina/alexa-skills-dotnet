@@ -10,7 +10,7 @@ public class DialogElicitSlot : IDirective
     [JsonPropertyName("type")]
     public string Type => DirectiveType;
 
-    [JsonPropertyName("slotToElicit"), Newtonsoft.Json.JsonRequired]
+    [JsonPropertyName("slotToElicit"), JsonRequired]
     public string SlotName { get; set; }
 
     [JsonPropertyName("updatedIntent")]

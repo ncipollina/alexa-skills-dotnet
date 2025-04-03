@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Alexa.NET.Request.Type;
 

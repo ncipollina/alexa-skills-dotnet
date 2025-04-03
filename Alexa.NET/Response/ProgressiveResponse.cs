@@ -2,10 +2,11 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Response.Directive;
-using Newtonsoft.Json.Linq;
+using Alexa.NET.Serialization;
 
 namespace Alexa.NET.Response;
 
@@ -96,7 +97,7 @@ public class ProgressiveResponse
             Header = Header,
             Directive = directive
         };
-        var json = JObject.FromObject(request).ToString();
+        var json = JsonSerializer.Serialize(request, AlexaJsonOptions.DefaultOptions);
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
         return Client.PostAsync(new Uri("/v1/directives", UriKind.Relative), httpContent);
     }

@@ -1,23 +1,23 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Alexa.NET.Request.Type;
 
 public class AudioPlayerRequest: Request
 {
-    [JsonProperty("token")]
+    [JsonPropertyName("token")]
     public string Token { get; set; }
 
-    [JsonProperty("offsetInMilliseconds")]
+    [JsonPropertyName("offsetInMilliseconds")]
     public long OffsetInMilliseconds { get; set; }
 
-    [JsonProperty("error")]
+    [JsonPropertyName("error")]
     public Error Error { get; set; }
 
-    [JsonProperty("currentPlaybackState")]
+    [JsonPropertyName("currentPlaybackState")]
     public PlaybackState CurrentPlaybackState { get; set; }
 
-    [JsonProperty("enqueuedToken")]
+    [JsonPropertyName("enqueuedToken")]
     public string EnqueuedToken { get; set; }
         
     public bool HasEnqueuedItem
